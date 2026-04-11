@@ -535,17 +535,33 @@ body {
   opacity: 0.55;
 }
 
-.task-person-badge {
+.task-phase-badge {
   font-size: 0.68rem;
   font-weight: 600;
-  padding: 2px 8px;
+  padding: 2px 10px;
   border-radius: 100px;
   flex-shrink: 0;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  user-select: none;
+  border: 1px solid transparent;
 }
 
-.task-person-badge.shared {
-  background: var(--border-light);
-  color: var(--text-muted);
+.task-phase-badge:hover {
+  opacity: 0.85;
+  transform: scale(1.05);
+}
+
+.task-phase-badge.pre-move {
+  background: var(--accent-soft);
+  color: var(--accent);
+  border-color: rgba(124, 58, 237, 0.15);
+}
+
+.task-phase-badge.post-move {
+  background: #ECFDF5;
+  color: #065F46;
+  border-color: rgba(6, 95, 70, 0.15);
 }
 
 /* ════════════════════════════════════
@@ -1506,70 +1522,70 @@ const defaultCategories = [
   {
     id: 'travel', emoji: '✈️', title: 'Travel Planning', color: 'peacock',
     tasks: [
-      { id: 'tr1', text: 'Pick dates', person: 'shared', priority: 'high', done: false },
-      { id: 'tr2', text: 'Check Heathrow transit visa (need valid US visa to transit through UK)', person: 'shared', priority: 'high', done: false },
-      { id: 'tr3', text: 'Book tickets', person: 'shared', priority: 'high', done: false },
+      { id: 'tr1', text: 'Pick dates', phase: 'pre-move', priority: 'high', done: false },
+      { id: 'tr2', text: 'Check Heathrow transit visa (need valid US visa to transit through UK)', phase: 'pre-move', priority: 'high', done: false },
+      { id: 'tr3', text: 'Book tickets', phase: 'pre-move', priority: 'high', done: false },
     ]
   },
   {
     id: 'housing', emoji: '🏠', title: 'Housing & Utilities', color: 'teal',
     tasks: [
-      { id: 'h1', text: 'Lease termination (move out date 06/02, gave notice, paid one month penalty)', person: 'shared', priority: 'high', done: false },
-      { id: 'h2', text: 'APS termination (electricity)', person: 'shared', priority: 'medium', done: false },
-      { id: 'h3', text: 'Cox termination (internet)', person: 'shared', priority: 'medium', done: false },
-      { id: 'h4', text: 'Update address (USPS mail forwarding)', person: 'shared', priority: 'medium', done: false },
+      { id: 'h1', text: 'Lease termination (move out date 06/02, gave notice, paid one month penalty)', phase: 'pre-move', priority: 'high', done: false },
+      { id: 'h2', text: 'APS termination (electricity)', phase: 'pre-move', priority: 'medium', done: false },
+      { id: 'h3', text: 'Cox termination (internet)', phase: 'pre-move', priority: 'medium', done: false },
+      { id: 'h4', text: 'Update address (USPS mail forwarding)', phase: 'pre-move', priority: 'medium', done: false },
     ]
   },
   {
     id: 'finances', emoji: '💰', title: 'Financial & Investments', color: 'saffron',
     tasks: [
-      { id: 'f1', text: 'Move assets to Charles Schwab', person: 'shared', priority: 'high', done: false },
-      { id: 'f2', text: 'Check moving bitcoin to another platform', person: 'shared', priority: 'high', done: false },
-      { id: 'f3', text: 'Figure out 401K and HSA accounts', person: 'shared', priority: 'high', done: false },
-      { id: 'f4', text: 'Inform U.S. banks/credit cards about relocation', person: 'shared', priority: 'high', done: false },
-      { id: 'f5', text: 'Freeze credit across 3 bureaus so nobody opens new account in my name', person: 'shared', priority: 'medium', done: false },
+      { id: 'f1', text: 'Move assets to Charles Schwab', phase: 'pre-move', priority: 'high', done: false },
+      { id: 'f2', text: 'Check moving bitcoin to another platform', phase: 'pre-move', priority: 'high', done: false },
+      { id: 'f3', text: 'Figure out 401K and HSA accounts', phase: 'pre-move', priority: 'high', done: false },
+      { id: 'f4', text: 'Inform U.S. banks/credit cards about relocation', phase: 'pre-move', priority: 'high', done: false },
+      { id: 'f5', text: 'Freeze credit across 3 bureaus so nobody opens new account in my name', phase: 'pre-move', priority: 'medium', done: false },
     ]
   },
   {
     id: 'phone', emoji: '📱', title: 'Phone & Digital Access', color: 'lavender',
     tasks: [
-      { id: 'ph1', text: 'Port number to Google Voice (works on wifi, cannot port until very end)', person: 'shared', priority: 'medium', done: false },
-      { id: 'ph2', text: 'Enable 2FA using email instead of phone where possible', person: 'shared', priority: 'medium', done: false },
+      { id: 'ph1', text: 'Port number to Google Voice (works on wifi, cannot port until very end)', phase: 'pre-move', priority: 'medium', done: false },
+      { id: 'ph2', text: 'Enable 2FA using email instead of phone where possible', phase: 'pre-move', priority: 'medium', done: false },
     ]
   },
   {
     id: 'transport', emoji: '🚗', title: 'Transportation', color: 'coral',
     tasks: [
-      { id: 'tp1', text: 'Sell car', person: 'shared', priority: 'high', done: false },
-      { id: 'tp2', text: 'Cancel car insurance', person: 'shared', priority: 'high', done: false },
-      { id: 'tp3', text: 'Get driving record', person: 'shared', priority: 'medium', done: false },
+      { id: 'tp1', text: 'Sell car', phase: 'pre-move', priority: 'high', done: false },
+      { id: 'tp2', text: 'Cancel car insurance', phase: 'pre-move', priority: 'high', done: false },
+      { id: 'tp3', text: 'Get driving record', phase: 'pre-move', priority: 'medium', done: false },
     ]
   },
   {
     id: 'moving', emoji: '📦', title: 'Moving & Logistics', color: 'magenta',
     tasks: [
-      { id: 'm1', text: 'Figure out international shipping', person: 'shared', priority: 'high', done: false },
-      { id: 'm2', text: 'Organize packing', person: 'shared', priority: 'high', done: false },
-      { id: 'm3', text: 'Pack voltage-compatible electronics', person: 'shared', priority: 'medium', done: false },
+      { id: 'm1', text: 'Figure out international shipping', phase: 'pre-move', priority: 'high', done: false },
+      { id: 'm2', text: 'Organize packing', phase: 'pre-move', priority: 'high', done: false },
+      { id: 'm3', text: 'Pack voltage-compatible electronics', phase: 'pre-move', priority: 'medium', done: false },
     ]
   },
   {
     id: 'subs', emoji: '📋', title: 'Subscriptions & Memberships', color: 'terracotta',
     tasks: [
-      { id: 's1', text: 'Cancel or downgrade subscriptions (Netflix, Hulu, HBO, Prime, Viki, NYT)', person: 'shared', priority: 'medium', done: false },
-      { id: 's2', text: 'Cancel gym', person: 'shared', priority: 'low', done: false },
+      { id: 's1', text: 'Cancel or downgrade subscriptions (Netflix, Hulu, HBO, Prime, Viki, NYT)', phase: 'pre-move', priority: 'medium', done: false },
+      { id: 's2', text: 'Cancel gym', phase: 'pre-move', priority: 'low', done: false },
     ]
   },
   {
     id: 'work', emoji: '💼', title: 'Work & Data', color: 'sage',
     tasks: [
-      { id: 'w1', text: 'Backup personal files from work devices', person: 'shared', priority: 'medium', done: false },
+      { id: 'w1', text: 'Backup personal files from work devices', phase: 'pre-move', priority: 'medium', done: false },
     ]
   },
   {
     id: 'docs', emoji: '📑', title: 'Documents & Records', color: 'terracotta',
     tasks: [
-      { id: 'd1', text: 'Get degree/transcript for MBA', person: 'shared', priority: 'medium', done: false },
+      { id: 'd1', text: 'Get degree/transcript for MBA', phase: 'pre-move', priority: 'medium', done: false },
     ]
   }
 ];
@@ -1615,9 +1631,7 @@ function renderCategories() {
   container.innerHTML = '';
 
   state.categories.forEach((cat) => {
-    const filteredTasks = currentFilter === 'all'
-      ? cat.tasks
-      : cat.tasks.filter(t => t.person === currentFilter || t.person === 'shared');
+    const filteredTasks = cat.tasks;
 
     if (filteredTasks.length === 0) return;
 
@@ -1638,13 +1652,13 @@ function renderCategories() {
       <div class="category-body">
         ${filteredTasks.map(task => `
           <div class="task-row">
-            <div class="task-item ${task.done ? 'completed' : ''}" data-person="${task.person}">
+            <div class="task-item ${task.done ? 'completed' : ''}">
               <div class="task-priority ${task.priority}"></div>
               <input type="checkbox" class="task-checkbox"
                 ${task.done ? 'checked' : ''}
                 onchange="toggleTask('${cat.id}', '${task.id}', event)">
               <span class="task-label" onclick="editTaskLabel('${cat.id}', '${task.id}', this)">${task.text}</span>
-              ${task.person === 'shared' ? '<span class="task-person-badge shared">both</span>' : ''}
+              <span class="task-phase-badge ${task.phase || 'pre-move'}" onclick="togglePhase('${cat.id}', '${task.id}', this)">${task.phase === 'post-move' ? 'post-move' : 'pre-move'}</span>
               <button class="task-comment-btn ${task.comment ? 'has-comment' : ''}"
                 onclick="toggleComment('${cat.id}', '${task.id}', this)"
                 title="${task.comment ? 'View note' : 'Add note'}">💬</button>
@@ -1673,6 +1687,16 @@ function toggleCategory(catId) {
   state.collapsed[catId] = !state.collapsed[catId];
   saveState();
   renderCategories();
+}
+
+function togglePhase(catId, taskId, badge) {
+  const cat = state.categories.find(c => c.id === catId);
+  const task = cat.tasks.find(t => t.id === taskId);
+  task.phase = task.phase === 'post-move' ? 'pre-move' : 'post-move';
+  badge.textContent = task.phase;
+  badge.className = 'task-phase-badge ' + task.phase;
+  saveState();
+  updateProgress();
 }
 
 function toggleTask(catId, taskId, evt) {
@@ -1719,7 +1743,7 @@ function addNewTask(catId, input) {
   cat.tasks.push({
     id: catId + '_' + Date.now(),
     text,
-    person: currentFilter === 'all' ? 'shared' : currentFilter,
+    phase: 'pre-move',
     priority: 'medium',
     done: false
   });
@@ -1788,13 +1812,14 @@ function filterPerson(person) {
 
 function updateProgress() {
   const allTasks = state.categories.flatMap(c => c.tasks);
-  const total = allTasks.length;
-  const done = allTasks.filter(t => t.done).length;
+  const preTasks = allTasks.filter(t => (t.phase || 'pre-move') === 'pre-move');
+  const total = preTasks.length;
+  const done = preTasks.filter(t => t.done).length;
   const pct = total > 0 ? Math.round((done / total) * 100) : 0;
 
   document.getElementById('progressFill').style.width = pct + '%';
-  document.getElementById('progressStat').innerHTML = `<strong>${pct}%</strong> complete`;
-  document.getElementById('progressCount').textContent = `${done} of ${total} tasks`;
+  document.getElementById('progressStat').innerHTML = `<strong>${pct}%</strong> pre-move`;
+  document.getElementById('progressCount').textContent = `${done} of ${total} pre-move tasks`;
 
   // Move mascot along progress bar
   const mascot = document.getElementById('mascot');
