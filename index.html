@@ -1,0 +1,2324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Great Move of 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #FAFAF7;
+  --surface: #FFFFFF;
+  --accent: #D97706;
+  --accent-hover: #B45309;
+  --accent-soft: #FEF3C7;
+  --accent-softer: #FFFBEB;
+  --success: #6B9B76;
+  --success-soft: #ECFDF5;
+  --text: #1F2937;
+  --text-secondary: #6B7280;
+  --text-muted: #9CA3AF;
+  --border: #E5E7EB;
+  --border-light: #F3F4F6;
+  --shadow-sm: 0 1px 2px rgba(0,0,0,0.04);
+  --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+  --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.06), 0 2px 4px -2px rgba(0,0,0,0.04);
+  --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.06), 0 4px 6px -4px rgba(0,0,0,0.04);
+  --radius: 12px;
+  --radius-lg: 16px;
+  --high: #EF4444;
+  --medium: #F59E0B;
+  --low: #6B9B76;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ════════════════════════════════════
+   HERO
+   ════════════════════════════════════ */
+.hero {
+  background: linear-gradient(135deg, #FDE8D0 0%, #FDECD4 30%, #FBF0E0 60%, var(--bg) 100%);
+  padding: 60px 24px 48px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -20%;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(217,119,6,0.06) 0%, transparent 70%);
+  border-radius: 50%;
+}
+
+.hero-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent);
+  background: var(--accent-soft);
+  padding: 6px 16px;
+  border-radius: 100px;
+  margin-bottom: 20px;
+}
+
+.hero h1 {
+  font-family: 'DM Sans', sans-serif;
+  font-size: clamp(1.8rem, 4vw, 2.8rem);
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.2;
+  margin-bottom: 8px;
+  letter-spacing: -0.02em;
+}
+
+.hero .subtitle {
+  font-size: 1rem;
+  color: var(--text-secondary);
+  font-weight: 400;
+}
+
+/* ════════════════════════════════════
+   COUNTDOWN
+   ════════════════════════════════════ */
+.countdown-section {
+  display: flex;
+  justify-content: center;
+  padding: 0 24px;
+  margin-top: -28px;
+  position: relative;
+  z-index: 2;
+}
+
+.countdown-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 20px 36px;
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  box-shadow: var(--shadow-md);
+}
+
+.countdown-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+
+.countdown-numbers {
+  display: flex;
+  gap: 16px;
+}
+
+.countdown-unit {
+  text-align: center;
+}
+
+.countdown-unit .number {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+
+.countdown-unit .label {
+  font-size: 0.65rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+
+.countdown-sep {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 300;
+  color: var(--border);
+  align-self: flex-start;
+  margin-top: 2px;
+}
+
+/* ════════════════════════════════════
+   PROGRESS BAR
+   ════════════════════════════════════ */
+.progress-section {
+  max-width: 720px;
+  margin: 36px auto 0;
+  padding: 0 24px;
+}
+
+.progress-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  box-shadow: var(--shadow-sm);
+}
+
+.progress-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 14px;
+}
+
+.progress-title {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.progress-stat {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.progress-stat strong {
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.progress-track {
+  width: 100%;
+  height: 8px;
+  background: var(--border-light);
+  border-radius: 100px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), #F59E0B);
+  border-radius: 100px;
+  transition: width 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+  min-width: 0;
+}
+
+.progress-endpoints {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: var(--text-muted);
+}
+
+.progress-endpoints span {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* ════════════════════════════════════
+   PERSON TABS
+   ════════════════════════════════════ */
+.person-tabs {
+  display: flex;
+  justify-content: center;
+  gap: 4px;
+  padding: 32px 24px 0;
+}
+
+.tab-group {
+  display: flex;
+  background: var(--border-light);
+  border-radius: 10px;
+  padding: 3px;
+}
+
+.person-tab {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 500;
+  padding: 8px 20px;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.person-tab:hover {
+  color: var(--text);
+}
+
+.person-tab.active {
+  background: var(--surface);
+  color: var(--text);
+  font-weight: 600;
+  box-shadow: var(--shadow-sm);
+}
+
+/* ════════════════════════════════════
+   MAIN CONTENT
+   ════════════════════════════════════ */
+.main-content {
+  max-width: 720px;
+  margin: 24px auto 0;
+  padding: 0 24px 60px;
+}
+
+/* ════════════════════════════════════
+   CATEGORY CARDS
+   ════════════════════════════════════ */
+.category {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  margin-bottom: 16px;
+  box-shadow: var(--shadow-sm);
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+  animation: cardIn 0.4s ease both;
+}
+
+.category:nth-child(2) { animation-delay: 0.04s; }
+.category:nth-child(3) { animation-delay: 0.08s; }
+.category:nth-child(4) { animation-delay: 0.12s; }
+.category:nth-child(5) { animation-delay: 0.16s; }
+.category:nth-child(6) { animation-delay: 0.20s; }
+.category:nth-child(7) { animation-delay: 0.24s; }
+.category:nth-child(8) { animation-delay: 0.28s; }
+
+@keyframes cardIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.category:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-1px);
+}
+
+.category-header {
+  padding: 16px 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  user-select: none;
+  transition: background 0.15s ease;
+  border-radius: var(--radius-lg);
+}
+
+.category-header:hover {
+  background: var(--accent-softer);
+}
+
+/* Color accents */
+.category[data-color="terracotta"] { border-left: 3px solid #C2542D; }
+.category[data-color="teal"] { border-left: 3px solid #0D9488; }
+.category[data-color="magenta"] { border-left: 3px solid #DB2777; }
+.category[data-color="saffron"] { border-left: 3px solid #D97706; }
+.category[data-color="sage"] { border-left: 3px solid #6B9B76; }
+.category[data-color="coral"] { border-left: 3px solid #EF4444; }
+.category[data-color="peacock"] { border-left: 3px solid #0284C7; }
+.category[data-color="lavender"] { border-left: 3px solid #8B5CF6; }
+
+.cat-emoji {
+  font-size: 1.3rem;
+}
+
+.cat-title {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text);
+  flex: 1;
+}
+
+.cat-count {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--accent);
+  background: var(--accent-soft);
+  padding: 3px 10px;
+  border-radius: 100px;
+}
+
+.toggle-arrow {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  transition: transform 0.3s ease;
+}
+
+.category.collapsed .toggle-arrow {
+  transform: rotate(-90deg);
+}
+
+.category-body {
+  max-height: 2000px;
+  overflow: hidden;
+  transition: max-height 0.4s ease, padding 0.2s ease;
+  padding: 0 0 8px;
+}
+
+.category.collapsed .category-body {
+  max-height: 0;
+  padding: 0;
+}
+
+/* ════════════════════════════════════
+   TASK ITEMS
+   ════════════════════════════════════ */
+.task-item {
+  display: flex;
+  align-items: center;
+  padding: 10px 20px;
+  gap: 12px;
+  transition: background 0.15s ease;
+}
+
+.task-item:hover {
+  background: rgba(0,0,0,0.015);
+}
+
+.task-priority {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.task-priority.high { background: var(--high); }
+.task-priority.medium { background: var(--medium); }
+.task-priority.low { background: var(--low); }
+
+.task-checkbox {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--border);
+  border-radius: 6px;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: all 0.2s ease;
+  position: relative;
+  background: var(--surface);
+}
+
+.task-checkbox:hover {
+  border-color: var(--accent);
+  background: var(--accent-softer);
+}
+
+.task-checkbox:checked {
+  background: var(--success);
+  border-color: var(--success);
+}
+
+.task-checkbox:checked::after {
+  content: '';
+  position: absolute;
+  top: 3px;
+  left: 6px;
+  width: 5px;
+  height: 9px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+.task-label {
+  font-size: 0.88rem;
+  color: var(--text);
+  cursor: pointer;
+  flex: 1;
+  transition: all 0.2s ease;
+  font-weight: 400;
+}
+
+.task-label:hover {
+  background: rgba(0,0,0,0.02);
+  border-radius: 4px;
+  padding: 1px 4px;
+  margin: -1px -4px;
+}
+
+.task-label-input {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 0.88rem;
+  font-weight: 400;
+  color: var(--text);
+  border: 1px solid var(--accent);
+  border-radius: 6px;
+  padding: 3px 8px;
+  flex: 1;
+  outline: none;
+  background: var(--surface);
+  box-shadow: 0 0 0 3px rgba(217, 119, 6, 0.08);
+}
+
+.task-item.completed .task-label {
+  text-decoration: line-through;
+  color: var(--text-muted);
+}
+
+.task-item.completed {
+  opacity: 0.55;
+}
+
+.task-person-badge {
+  font-size: 0.68rem;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 100px;
+  flex-shrink: 0;
+}
+
+.task-person-badge.shared {
+  background: var(--border-light);
+  color: var(--text-muted);
+}
+
+/* ════════════════════════════════════
+   TASK COMMENTS
+   ════════════════════════════════════ */
+.task-row {
+  position: relative;
+}
+
+.task-comment-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  padding: 2px 4px;
+  border-radius: 4px;
+  transition: all 0.15s ease;
+  flex-shrink: 0;
+  opacity: 0.4;
+}
+
+.task-comment-btn:hover {
+  opacity: 1;
+  color: var(--accent);
+}
+
+.task-comment-btn.has-comment {
+  opacity: 0.8;
+  color: var(--accent);
+}
+
+.task-comment-area {
+  display: none;
+  padding: 4px 20px 10px 62px;
+}
+
+.task-comment-area.open {
+  display: block;
+  animation: commentSlide 0.2s ease;
+}
+
+@keyframes commentSlide {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.task-comment-area textarea {
+  width: 100%;
+  min-height: 48px;
+  max-height: 120px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 8px 10px;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  background: var(--bg);
+  resize: vertical;
+  outline: none;
+  transition: border-color 0.2s;
+  line-height: 1.5;
+}
+
+.task-comment-area textarea:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(217, 119, 6, 0.08);
+}
+
+.task-comment-area textarea::placeholder {
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+.task-item.completed .task-comment-btn {
+  opacity: 0.3;
+}
+
+/* ════════════════════════════════════
+   ADD TASK
+   ════════════════════════════════════ */
+.add-task-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 20px;
+  margin: 4px 20px 8px;
+  background: none;
+  border: none;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: color 0.2s ease;
+  border-radius: 8px;
+}
+
+.add-task-btn:hover {
+  color: var(--accent);
+  background: var(--accent-softer);
+}
+
+.add-task-input-row {
+  display: none;
+  padding: 6px 20px 10px;
+  gap: 8px;
+  align-items: center;
+}
+
+.add-task-input-row.active {
+  display: flex;
+}
+
+.add-task-input-row input {
+  flex: 1;
+  padding: 8px 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 0.85rem;
+  outline: none;
+  background: var(--bg);
+  transition: border-color 0.2s;
+}
+
+.add-task-input-row input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(217, 119, 6, 0.08);
+}
+
+.add-task-input-row button {
+  padding: 8px 14px;
+  border: none;
+  border-radius: 8px;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-weight: 600;
+  font-size: 0.82rem;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.add-task-input-row .btn-add {
+  background: var(--accent);
+  color: white;
+}
+.add-task-input-row .btn-add:hover { background: var(--accent-hover); }
+.add-task-input-row .btn-cancel {
+  background: var(--border-light);
+  color: var(--text-secondary);
+}
+
+/* ════════════════════════════════════
+   NOTES
+   ════════════════════════════════════ */
+.notes-section {
+  max-width: 720px;
+  margin: 0 auto 40px;
+  padding: 0 24px;
+}
+
+.notes-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+  box-shadow: var(--shadow-sm);
+}
+
+.notes-card h3 {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 12px;
+}
+
+.notes-card textarea {
+  width: 100%;
+  min-height: 80px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 12px;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 0.88rem;
+  color: var(--text);
+  background: var(--bg);
+  resize: vertical;
+  outline: none;
+  transition: border-color 0.2s ease;
+  line-height: 1.6;
+}
+
+.notes-card textarea:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(217, 119, 6, 0.08);
+}
+
+.notes-card textarea::placeholder {
+  color: var(--text-muted);
+}
+
+/* ════════════════════════════════════
+   FOOTER
+   ════════════════════════════════════ */
+.footer {
+  text-align: center;
+  padding: 32px 24px;
+  border-top: 1px solid var(--border);
+  color: var(--text-muted);
+  font-size: 0.82rem;
+}
+
+.footer-route {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  margin-bottom: 6px;
+}
+
+.footer-route .dot {
+  width: 4px;
+  height: 4px;
+  background: var(--text-muted);
+  border-radius: 50%;
+}
+
+.footer-route .line {
+  width: 32px;
+  height: 1px;
+  background: var(--border);
+}
+
+/* ════════════════════════════════════
+   PAPER AIRPLANE MASCOT
+   ════════════════════════════════════ */
+.progress-track-wrapper {
+  position: relative;
+}
+
+.mascot {
+  position: absolute;
+  top: -22px;
+  transition: left 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+  z-index: 3;
+  font-size: 20px;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+  animation: mascotBob 3s ease-in-out infinite;
+  cursor: default;
+}
+
+@keyframes mascotBob {
+  0%, 100% { transform: translateY(0) rotate(-5deg); }
+  50% { transform: translateY(-6px) rotate(5deg); }
+}
+
+.mascot.celebrate {
+  animation: mascotLoop 0.7s ease-in-out;
+}
+
+@keyframes mascotLoop {
+  0% { transform: translateY(0) rotate(0deg) scale(1); }
+  25% { transform: translateY(-20px) rotate(180deg) scale(1.2); }
+  50% { transform: translateY(-30px) rotate(360deg) scale(1.3); }
+  75% { transform: translateY(-15px) rotate(540deg) scale(1.1); }
+  100% { transform: translateY(0) rotate(720deg) scale(1); }
+}
+
+/* ════════════════════════════════════
+   CONFETTI
+   ════════════════════════════════════ */
+.confetti-container {
+  position: fixed;
+  pointer-events: none;
+  z-index: 9999;
+}
+
+.confetti-piece {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  opacity: 1;
+  animation: confettiFall 0.9s ease-out forwards;
+}
+
+.confetti-piece.circle { border-radius: 50%; }
+.confetti-piece.square { border-radius: 2px; }
+.confetti-piece.star {
+  width: 0; height: 0;
+  background: none !important;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-bottom: 10px solid var(--accent);
+}
+
+@keyframes confettiFall {
+  0% { opacity: 1; transform: translate(0, 0) rotate(0deg) scale(1); }
+  100% { opacity: 0; transform: translate(var(--tx), var(--ty)) rotate(var(--rot)) scale(0.3); }
+}
+
+/* ════════════════════════════════════
+   TOAST NOTIFICATIONS
+   ════════════════════════════════════ */
+.toast-container {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 9998;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  pointer-events: none;
+}
+
+.toast {
+  background: var(--text);
+  color: white;
+  padding: 12px 24px;
+  border-radius: 100px;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 500;
+  box-shadow: var(--shadow-lg);
+  animation: toastIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), toastOut 0.3s ease 2.7s forwards;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.toast .toast-emoji {
+  font-size: 1.1rem;
+}
+
+.toast.milestone {
+  background: linear-gradient(135deg, var(--accent), #F59E0B);
+  font-weight: 700;
+  padding: 14px 28px;
+  font-size: 0.95rem;
+}
+
+@keyframes toastIn {
+  from { opacity: 0; transform: translateY(20px) scale(0.9); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes toastOut {
+  from { opacity: 1; transform: translateY(0); }
+  to { opacity: 0; transform: translateY(-10px); }
+}
+
+/* ════════════════════════════════════
+   DYNAMIC HERO
+   ════════════════════════════════════ */
+.hero {
+  transition: background 1.5s ease;
+}
+
+/* ════════════════════════════════════
+   PAPER PLANE MASCOT CHARACTER
+   ════════════════════════════════════ */
+.plane-mascot {
+  display: inline-block;
+  margin-bottom: 16px;
+  animation: planeFloat 4s ease-in-out infinite;
+  cursor: pointer;
+  position: relative;
+}
+
+.plane-mascot:hover {
+  animation: planeWave 0.6s ease;
+}
+
+.plane-mascot svg {
+  filter: drop-shadow(0 6px 16px rgba(217, 119, 6, 0.18));
+  transition: transform 0.3s ease;
+}
+
+.plane-mascot:hover svg {
+  transform: scale(1.08);
+}
+
+@keyframes planeFloat {
+  0%, 100% { transform: translateY(0) rotate(-2deg); }
+  30% { transform: translateY(-10px) rotate(1deg); }
+  60% { transform: translateY(-4px) rotate(-1deg); }
+}
+
+@keyframes planeWave {
+  0% { transform: rotate(0deg); }
+  15% { transform: rotate(8deg) scale(1.05); }
+  30% { transform: rotate(-6deg) scale(1.05); }
+  45% { transform: rotate(6deg); }
+  60% { transform: rotate(-3deg); }
+  100% { transform: rotate(0deg); }
+}
+
+/* Blinking eyes */
+.plane-eye {
+  animation: blink 4s ease-in-out infinite;
+}
+
+@keyframes blink {
+  0%, 42%, 44%, 100% { transform: scaleY(1); }
+  43% { transform: scaleY(0.1); }
+}
+
+/* Waving arm */
+.plane-arm-right {
+  transform-origin: 85px 58px;
+  animation: armWave 3s ease-in-out infinite;
+}
+
+@keyframes armWave {
+  0%, 70%, 100% { transform: rotate(0deg); }
+  75% { transform: rotate(-15deg); }
+  80% { transform: rotate(10deg); }
+  85% { transform: rotate(-10deg); }
+  90% { transform: rotate(5deg); }
+}
+
+/* ════════════════════════════════════
+   PLAYFUL HOVER EFFECTS
+   ════════════════════════════════════ */
+.category {
+  perspective: 800px;
+}
+
+.category:hover {
+  transform: translateY(-2px) rotateX(1deg);
+  box-shadow: var(--shadow-lg);
+}
+
+.category-header:hover .cat-emoji {
+  display: inline-block;
+  animation: emojiWiggle 0.5s ease;
+}
+
+@keyframes emojiWiggle {
+  0% { transform: rotate(0deg); }
+  20% { transform: rotate(14deg) scale(1.1); }
+  40% { transform: rotate(-10deg); }
+  60% { transform: rotate(8deg); }
+  80% { transform: rotate(-4deg); }
+  100% { transform: rotate(0deg); }
+}
+
+.task-checkbox:checked {
+  animation: checkPop 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes checkPop {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.25); }
+  100% { transform: scale(1); }
+}
+
+/* ════════════════════════════════════
+   SECTION TABS
+   ════════════════════════════════════ */
+.section-tabs {
+  display: flex;
+  justify-content: center;
+  padding: 28px 24px 0;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+.section-tab-group {
+  display: flex;
+  background: var(--border-light);
+  border-radius: 10px;
+  padding: 3px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.section-tab {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 0.82rem;
+  font-weight: 500;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.section-tab:hover { color: var(--text); }
+
+.section-tab.active {
+  background: var(--surface);
+  color: var(--text);
+  font-weight: 600;
+  box-shadow: var(--shadow-sm);
+}
+
+.section-content { display: none; }
+.section-content.active { display: block; }
+
+.section-tab {
+  position: relative;
+}
+
+.tab-delete {
+  display: none;
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--high);
+  color: white;
+  font-size: 10px;
+  line-height: 16px;
+  text-align: center;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  font-weight: 700;
+}
+
+.section-tab:hover .tab-delete {
+  display: block;
+}
+
+.tab-add-btn {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 8px 14px;
+  border: 2px dashed var(--border);
+  border-radius: 8px;
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.tab-add-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: var(--accent-softer);
+}
+
+.tab-name-input {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 0.82rem;
+  font-weight: 500;
+  padding: 6px 14px;
+  border: 2px solid var(--accent);
+  border-radius: 8px;
+  outline: none;
+  background: var(--surface);
+  color: var(--text);
+  width: 120px;
+  box-shadow: 0 0 0 3px rgba(217, 119, 6, 0.08);
+}
+
+/* ════════════════════════════════════
+   DATA TABLES
+   ════════════════════════════════════ */
+.data-section {
+  max-width: 720px;
+  margin: 24px auto 0;
+  padding: 0 24px 40px;
+}
+
+.data-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+  margin-bottom: 16px;
+}
+
+.data-card-header {
+  padding: 16px 20px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text);
+  border-bottom: 1px solid var(--border-light);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.84rem;
+}
+
+.data-table th {
+  text-align: left;
+  padding: 10px 16px;
+  font-weight: 600;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+  background: var(--bg);
+  border-bottom: 1px solid var(--border-light);
+}
+
+.data-table td {
+  padding: 10px 16px;
+  color: var(--text);
+  border-bottom: 1px solid var(--border-light);
+  vertical-align: top;
+}
+
+.data-table tr:last-child td {
+  border-bottom: none;
+}
+
+.data-table tr:hover td {
+  background: rgba(0,0,0,0.01);
+}
+
+.data-table .tag {
+  display: inline-block;
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 100px;
+}
+
+.tag-sell { background: #FEF3C7; color: #92400E; }
+.tag-donate { background: #ECFDF5; color: #065F46; }
+.tag-give { background: #EDE9FE; color: #5B21B6; }
+
+.checklist-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 20px;
+  border-bottom: 1px solid var(--border-light);
+  font-size: 0.88rem;
+}
+
+.checklist-item:last-child { border-bottom: none; }
+
+.data-table .task-checkbox,
+.checklist-item .task-checkbox {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 18px;
+  height: 18px;
+  border: 2px solid var(--border);
+  border-radius: 5px;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: all 0.2s ease;
+  position: relative;
+  background: var(--surface);
+}
+
+.data-table .task-checkbox:hover,
+.checklist-item .task-checkbox:hover {
+  border-color: var(--accent);
+}
+
+.data-table .task-checkbox:checked,
+.checklist-item .task-checkbox:checked {
+  background: var(--success);
+  border-color: var(--success);
+}
+
+.data-table .task-checkbox:checked::after,
+.checklist-item .task-checkbox:checked::after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 5px;
+  width: 4px;
+  height: 8px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+.data-table tr.row-done td {
+  opacity: 0.4;
+  text-decoration: line-through;
+}
+
+.checklist-item.row-done {
+  opacity: 0.4;
+  text-decoration: line-through;
+}
+
+.data-table td.editable,
+.checklist-item .editable-text {
+  cursor: pointer;
+}
+
+.data-table td.editable:hover,
+.checklist-item .editable-text:hover {
+  background: rgba(0,0,0,0.02);
+  border-radius: 4px;
+}
+
+.cell-input {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: inherit;
+  font-weight: inherit;
+  color: var(--text);
+  border: 1px solid var(--accent);
+  border-radius: 4px;
+  padding: 2px 6px;
+  outline: none;
+  background: var(--surface);
+  box-shadow: 0 0 0 3px rgba(217, 119, 6, 0.08);
+  width: 100%;
+}
+
+.checklist-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+  flex-shrink: 0;
+}
+
+/* ════════════════════════════════════
+   RESPONSIVE
+   ════════════════════════════════════ */
+@media (max-width: 600px) {
+  .hero { padding: 40px 20px 36px; }
+  .countdown-card {
+    flex-direction: column;
+    gap: 12px;
+    padding: 16px 24px;
+  }
+  .countdown-numbers { gap: 12px; }
+  .countdown-unit .number { font-size: 1.5rem; }
+  .tab-group { flex-wrap: wrap; justify-content: center; }
+  .category-header { padding: 14px 16px; }
+  .task-item { padding: 8px 16px; }
+  .add-task-btn { margin: 4px 16px 8px; }
+  .add-task-input-row { padding: 6px 16px 10px; }
+  .mascot { font-size: 16px; top: -18px; }
+  .toast { font-size: 0.78rem; padding: 10px 18px; }
+  .section-tab { font-size: 0.75rem; padding: 6px 12px; }
+  .data-table { font-size: 0.78rem; }
+  .data-table th, .data-table td { padding: 8px 10px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ════ HERO ════ -->
+<header class="hero">
+  <!-- Anthropomorphic Paper Plane Mascot -->
+  <div class="plane-mascot" id="planeMascot" title="Hi! I'm Jet, your moving buddy!">
+    <svg width="120" height="100" viewBox="0 0 120 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <!-- Body (paper plane shape) -->
+      <path d="M10 50 L60 20 L110 50 L60 45 Z" fill="#FBBF24" stroke="#D97706" stroke-width="2" stroke-linejoin="round"/>
+      <path d="M10 50 L60 45 L110 50 L60 70 Z" fill="#F59E0B" stroke="#D97706" stroke-width="2" stroke-linejoin="round"/>
+      <!-- Fold line -->
+      <line x1="60" y1="20" x2="60" y2="70" stroke="#D97706" stroke-width="1.5" stroke-dasharray="3 2" opacity="0.4"/>
+      <!-- Face -->
+      <!-- Eyes -->
+      <g class="plane-eye">
+        <ellipse cx="48" cy="42" rx="5" ry="5.5" fill="white"/>
+        <ellipse cx="48" cy="43" rx="3" ry="3.2" fill="#1F2937"/>
+        <circle cx="46.5" cy="41.5" r="1.2" fill="white"/>
+      </g>
+      <g class="plane-eye">
+        <ellipse cx="72" cy="42" rx="5" ry="5.5" fill="white"/>
+        <ellipse cx="72" cy="43" rx="3" ry="3.2" fill="#1F2937"/>
+        <circle cx="70.5" cy="41.5" r="1.2" fill="white"/>
+      </g>
+      <!-- Rosy cheeks -->
+      <circle cx="40" cy="49" r="4" fill="#FECDD3" opacity="0.7"/>
+      <circle cx="80" cy="49" r="4" fill="#FECDD3" opacity="0.7"/>
+      <!-- Happy mouth -->
+      <path d="M52 52 Q60 60 68 52" stroke="#92400E" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+      <!-- Little legs -->
+      <line x1="50" y1="70" x2="46" y2="85" stroke="#D97706" stroke-width="2.5" stroke-linecap="round"/>
+      <line x1="70" y1="70" x2="74" y2="85" stroke="#D97706" stroke-width="2.5" stroke-linecap="round"/>
+      <!-- Shoes -->
+      <ellipse cx="44" cy="87" rx="5" ry="3" fill="#92400E"/>
+      <ellipse cx="76" cy="87" rx="5" ry="3" fill="#92400E"/>
+      <!-- Left arm -->
+      <line x1="18" y1="50" x2="10" y2="38" stroke="#D97706" stroke-width="2.5" stroke-linecap="round"/>
+      <circle cx="9" cy="36" r="3" fill="#FBBF24" stroke="#D97706" stroke-width="1.5"/>
+      <!-- Right arm (waving) -->
+      <g class="plane-arm-right">
+        <line x1="100" y1="50" x2="108" y2="36" stroke="#D97706" stroke-width="2.5" stroke-linecap="round"/>
+        <circle cx="109" cy="34" r="3" fill="#FBBF24" stroke="#D97706" stroke-width="1.5"/>
+      </g>
+      <!-- Tiny pilot goggles strap -->
+      <path d="M38 38 Q48 34 58 38" stroke="#92400E" stroke-width="1" fill="none" opacity="0.3"/>
+      <path d="M62 38 Q72 34 82 38" stroke="#92400E" stroke-width="1" fill="none" opacity="0.3"/>
+    </svg>
+  </div>
+  <div class="hero-label">Moving Tracker</div>
+  <h1>The Great Move of 2026</h1>
+</header>
+
+<!-- ════ COUNTDOWN ════ -->
+<section class="countdown-section">
+  <div class="countdown-card">
+    <div class="countdown-label">Days until takeoff</div>
+    <div class="countdown-numbers">
+      <div class="countdown-unit">
+        <div class="number" id="cd-days">--</div>
+        <div class="label">Days</div>
+      </div>
+      <span class="countdown-sep">:</span>
+      <div class="countdown-unit">
+        <div class="number" id="cd-hours">--</div>
+        <div class="label">Hours</div>
+      </div>
+      <span class="countdown-sep">:</span>
+      <div class="countdown-unit">
+        <div class="number" id="cd-mins">--</div>
+        <div class="label">Min</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════ PROGRESS ════ -->
+<section class="progress-section">
+  <div class="progress-card">
+    <div class="progress-header">
+      <div class="progress-title">Journey Progress</div>
+      <div class="progress-stat" id="progressStat"><strong>0%</strong> complete</div>
+    </div>
+    <div class="progress-track-wrapper">
+      <div class="mascot" id="mascot">✈️</div>
+      <div class="progress-track">
+        <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+      </div>
+    </div>
+    <div class="progress-endpoints">
+      <span>US</span>
+      <span id="progressCount">0 of 0 tasks</span>
+      <span>India</span>
+    </div>
+  </div>
+</section>
+
+<!-- ════ PERSON TABS ════ -->
+<div class="person-tabs">
+  <div class="tab-group">
+    <button class="person-tab active" data-person="all" onclick="filterPerson('all')">All Tasks</button>
+    <button class="person-tab" data-person="person1" onclick="filterPerson('person1')">Person 1</button>
+    <button class="person-tab" data-person="person2" onclick="filterPerson('person2')">Person 2</button>
+  </div>
+</div>
+
+<!-- ════ SECTION TABS ════ -->
+<div class="section-tabs">
+  <div class="section-tab-group" id="sectionTabGroup"></div>
+  <button class="tab-add-btn" onclick="promptAddTab()" title="Add a new tab">+</button>
+</div>
+
+<!-- ════ TO DO SECTION ════ -->
+<div class="section-content active" id="section-todo">
+  <main class="main-content" id="taskContainer"></main>
+  <section class="notes-section">
+    <div class="notes-card">
+      <h3>Notes & Reminders</h3>
+      <textarea id="movingNotes" placeholder="Jot down important notes, contacts, addresses, flight details..."></textarea>
+    </div>
+  </section>
+</div>
+
+<!-- ════ TO SELL/DONATE SECTION ════ -->
+<div class="section-content" id="section-sell">
+  <div class="data-section" id="sellContainer"></div>
+</div>
+
+<!-- ════ TO BUY SECTION ════ -->
+<div class="section-content" id="section-buy">
+  <div class="data-section" id="buyContainer"></div>
+</div>
+
+<!-- ════ TO PACK/SHIP SECTION ════ -->
+<div class="section-content" id="section-pack">
+  <div class="data-section" id="packContainer"></div>
+</div>
+
+<!-- ════ ADDRESS UPDATE SECTION ════ -->
+<div class="section-content" id="section-address">
+  <div class="data-section" id="addressContainer"></div>
+</div>
+
+<!-- ════ CUSTOM TABS ════ -->
+<div id="customTabsContainer"></div>
+
+<!-- ════ TOAST ════ -->
+<div class="toast-container" id="toastContainer"></div>
+
+<!-- ════ FOOTER ════ -->
+<footer class="footer">
+  <div class="footer-route">
+    <span>US</span>
+    <span class="line"></span>
+    <span class="dot"></span>
+    <span class="line"></span>
+    <span>India</span>
+  </div>
+  <p>The Great Move of 2026</p>
+</footer>
+
+<script>
+const MOVE_DATE = new Date('2026-07-15T10:00:00');
+
+const defaultCategories = [
+  {
+    id: 'travel', emoji: '✈️', title: 'Travel Planning', color: 'peacock',
+    tasks: [
+      { id: 'tr1', text: 'Pick dates', person: 'shared', priority: 'high', done: false },
+      { id: 'tr2', text: 'Check Heathrow transit visa (need valid US visa to transit through UK)', person: 'shared', priority: 'high', done: false },
+      { id: 'tr3', text: 'Book tickets', person: 'shared', priority: 'high', done: false },
+    ]
+  },
+  {
+    id: 'housing', emoji: '🏠', title: 'Housing & Utilities', color: 'teal',
+    tasks: [
+      { id: 'h1', text: 'Lease termination (move out date 06/02, gave notice, paid one month penalty)', person: 'shared', priority: 'high', done: false },
+      { id: 'h2', text: 'APS termination (electricity)', person: 'shared', priority: 'medium', done: false },
+      { id: 'h3', text: 'Cox termination (internet)', person: 'shared', priority: 'medium', done: false },
+      { id: 'h4', text: 'Update address (USPS mail forwarding)', person: 'shared', priority: 'medium', done: false },
+    ]
+  },
+  {
+    id: 'finances', emoji: '💰', title: 'Financial & Investments', color: 'saffron',
+    tasks: [
+      { id: 'f1', text: 'Move assets to Charles Schwab', person: 'shared', priority: 'high', done: false },
+      { id: 'f2', text: 'Check moving bitcoin to another platform', person: 'shared', priority: 'high', done: false },
+      { id: 'f3', text: 'Figure out 401K and HSA accounts', person: 'shared', priority: 'high', done: false },
+      { id: 'f4', text: 'Inform U.S. banks/credit cards about relocation', person: 'shared', priority: 'high', done: false },
+      { id: 'f5', text: 'Freeze credit across 3 bureaus so nobody opens new account in my name', person: 'shared', priority: 'medium', done: false },
+    ]
+  },
+  {
+    id: 'phone', emoji: '📱', title: 'Phone & Digital Access', color: 'lavender',
+    tasks: [
+      { id: 'ph1', text: 'Port number to Google Voice (works on wifi, cannot port until very end)', person: 'shared', priority: 'medium', done: false },
+      { id: 'ph2', text: 'Enable 2FA using email instead of phone where possible', person: 'shared', priority: 'medium', done: false },
+    ]
+  },
+  {
+    id: 'transport', emoji: '🚗', title: 'Transportation', color: 'coral',
+    tasks: [
+      { id: 'tp1', text: 'Sell car', person: 'shared', priority: 'high', done: false },
+      { id: 'tp2', text: 'Cancel car insurance', person: 'shared', priority: 'high', done: false },
+      { id: 'tp3', text: 'Get driving record', person: 'shared', priority: 'medium', done: false },
+    ]
+  },
+  {
+    id: 'moving', emoji: '📦', title: 'Moving & Logistics', color: 'magenta',
+    tasks: [
+      { id: 'm1', text: 'Figure out international shipping', person: 'shared', priority: 'high', done: false },
+      { id: 'm2', text: 'Organize packing', person: 'shared', priority: 'high', done: false },
+      { id: 'm3', text: 'Pack voltage-compatible electronics', person: 'shared', priority: 'medium', done: false },
+    ]
+  },
+  {
+    id: 'subs', emoji: '📋', title: 'Subscriptions & Memberships', color: 'terracotta',
+    tasks: [
+      { id: 's1', text: 'Cancel or downgrade subscriptions (Netflix, Hulu, HBO, Prime, Viki, NYT)', person: 'shared', priority: 'medium', done: false },
+      { id: 's2', text: 'Cancel gym', person: 'shared', priority: 'low', done: false },
+    ]
+  },
+  {
+    id: 'work', emoji: '💼', title: 'Work & Data', color: 'sage',
+    tasks: [
+      { id: 'w1', text: 'Backup personal files from work devices', person: 'shared', priority: 'medium', done: false },
+    ]
+  },
+  {
+    id: 'docs', emoji: '📑', title: 'Documents & Records', color: 'terracotta',
+    tasks: [
+      { id: 'd1', text: 'Get degree/transcript for MBA', person: 'shared', priority: 'medium', done: false },
+    ]
+  }
+];
+
+let state = loadState();
+let currentFilter = 'all';
+
+function loadState() {
+  // Return defaults synchronously; async load overwrites from server
+  return { categories: defaultCategories, notes: '', collapsed: {}, checkedItems: {}, editedItems: {}, customTabs: [], extraRows: {} };
+}
+
+async function loadStateFromServer() {
+  try {
+    const res = await fetch('/api/state');
+    const saved = await res.json();
+    if (saved && saved.categories) {
+      state = saved;
+      renderCategories();
+      initNotes();
+      renderTabs();
+    }
+  } catch(e) {
+    console.log('No saved state on server, using defaults');
+  }
+}
+
+let saveTimeout = null;
+function saveState() {
+  // Debounce saves to avoid flooding the server
+  clearTimeout(saveTimeout);
+  saveTimeout = setTimeout(() => {
+    fetch('/api/state', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(state)
+    }).catch(e => console.error('Failed to save:', e));
+  }, 300);
+}
+
+function renderCategories() {
+  const container = document.getElementById('taskContainer');
+  container.innerHTML = '';
+
+  state.categories.forEach((cat) => {
+    const filteredTasks = currentFilter === 'all'
+      ? cat.tasks
+      : cat.tasks.filter(t => t.person === currentFilter || t.person === 'shared');
+
+    if (filteredTasks.length === 0) return;
+
+    const isCollapsed = state.collapsed[cat.id] || false;
+    const doneCount = filteredTasks.filter(t => t.done).length;
+
+    const div = document.createElement('div');
+    div.className = `category ${isCollapsed ? 'collapsed' : ''}`;
+    div.setAttribute('data-color', cat.color);
+
+    div.innerHTML = `
+      <div class="category-header" onclick="toggleCategory('${cat.id}')">
+        <span class="cat-emoji">${cat.emoji}</span>
+        <span class="cat-title">${cat.title}</span>
+        <span class="cat-count">${doneCount}/${filteredTasks.length}</span>
+        <span class="toggle-arrow">▾</span>
+      </div>
+      <div class="category-body">
+        ${filteredTasks.map(task => `
+          <div class="task-row">
+            <div class="task-item ${task.done ? 'completed' : ''}" data-person="${task.person}">
+              <div class="task-priority ${task.priority}"></div>
+              <input type="checkbox" class="task-checkbox"
+                ${task.done ? 'checked' : ''}
+                onchange="toggleTask('${cat.id}', '${task.id}', event)">
+              <span class="task-label" onclick="editTaskLabel('${cat.id}', '${task.id}', this)">${task.text}</span>
+              ${task.person === 'shared' ? '<span class="task-person-badge shared">both</span>' : ''}
+              <button class="task-comment-btn ${task.comment ? 'has-comment' : ''}"
+                onclick="toggleComment('${cat.id}', '${task.id}', this)"
+                title="${task.comment ? 'View note' : 'Add note'}">💬</button>
+            </div>
+            <div class="task-comment-area" id="comment-${task.id}">
+              <textarea placeholder="Add a note..."
+                oninput="updateComment('${cat.id}', '${task.id}', this.value)">${task.comment || ''}</textarea>
+            </div>
+          </div>
+        `).join('')}
+        <button class="add-task-btn" onclick="showAddTask(this, '${cat.id}')">+ Add task</button>
+        <div class="add-task-input-row">
+          <input type="text" placeholder="New task..." onkeydown="if(event.key==='Enter') addNewTask('${cat.id}', this)">
+          <button class="btn-add" onclick="addNewTask('${cat.id}', this.previousElementSibling)">Add</button>
+          <button class="btn-cancel" onclick="hideAddTask(this.parentElement)">Cancel</button>
+        </div>
+      </div>
+    `;
+    container.appendChild(div);
+  });
+
+  updateProgress();
+}
+
+function toggleCategory(catId) {
+  state.collapsed[catId] = !state.collapsed[catId];
+  saveState();
+  renderCategories();
+}
+
+function toggleTask(catId, taskId, evt) {
+  const cat = state.categories.find(c => c.id === catId);
+  const task = cat.tasks.find(t => t.id === taskId);
+  const wasCompleted = task.done;
+  task.done = !task.done;
+  saveState();
+
+  if (task.done && !wasCompleted) {
+    // Find the checkbox element for confetti origin
+    const checkboxes = document.querySelectorAll('.task-checkbox');
+    let origin = null;
+    checkboxes.forEach(cb => {
+      if (cb.closest(`[data-person]`) && cb.nextElementSibling?.textContent?.trim() === task.text) {
+        origin = cb;
+      }
+    });
+    if (origin) createConfetti(origin);
+    triggerMascotCelebration();
+    showRandomToast();
+  }
+
+  renderCategories();
+}
+
+function showAddTask(btn, catId) {
+  const inputRow = btn.nextElementSibling;
+  btn.style.display = 'none';
+  inputRow.classList.add('active');
+  inputRow.querySelector('input').focus();
+}
+
+function hideAddTask(inputRow) {
+  inputRow.classList.remove('active');
+  inputRow.previousElementSibling.style.display = 'flex';
+  inputRow.querySelector('input').value = '';
+}
+
+function addNewTask(catId, input) {
+  const text = input.value.trim();
+  if (!text) return;
+  const cat = state.categories.find(c => c.id === catId);
+  cat.tasks.push({
+    id: catId + '_' + Date.now(),
+    text,
+    person: currentFilter === 'all' ? 'shared' : currentFilter,
+    priority: 'medium',
+    done: false
+  });
+  saveState();
+  renderCategories();
+}
+
+function editTaskLabel(catId, taskId, labelEl) {
+  const cat = state.categories.find(c => c.id === catId);
+  const task = cat.tasks.find(t => t.id === taskId);
+
+  const input = document.createElement('input');
+  input.type = 'text';
+  input.className = 'task-label-input';
+  input.value = task.text;
+
+  const finishEdit = () => {
+    const newText = input.value.trim();
+    if (newText && newText !== task.text) {
+      task.text = newText;
+      saveState();
+    }
+    renderCategories();
+  };
+
+  input.addEventListener('blur', finishEdit);
+  input.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') input.blur();
+    if (e.key === 'Escape') { input.value = task.text; input.blur(); }
+  });
+
+  labelEl.replaceWith(input);
+  input.focus();
+  input.select();
+}
+
+function toggleComment(catId, taskId, btn) {
+  const area = document.getElementById('comment-' + taskId);
+  if (!area) return;
+  const isOpen = area.classList.contains('open');
+  // Close all other open comments
+  document.querySelectorAll('.task-comment-area.open').forEach(el => el.classList.remove('open'));
+  if (!isOpen) {
+    area.classList.add('open');
+    area.querySelector('textarea').focus();
+  }
+}
+
+function updateComment(catId, taskId, value) {
+  const cat = state.categories.find(c => c.id === catId);
+  const task = cat.tasks.find(t => t.id === taskId);
+  task.comment = value;
+  // Update the button style without re-rendering
+  const btn = document.querySelector(`#comment-${taskId}`)?.previousElementSibling?.querySelector('.task-comment-btn');
+  if (btn) btn.classList.toggle('has-comment', !!value);
+  saveState();
+}
+
+function filterPerson(person) {
+  currentFilter = person;
+  document.querySelectorAll('.person-tab').forEach(tab => {
+    tab.classList.toggle('active', tab.dataset.person === person);
+  });
+  renderCategories();
+}
+
+function updateProgress() {
+  const allTasks = state.categories.flatMap(c => c.tasks);
+  const total = allTasks.length;
+  const done = allTasks.filter(t => t.done).length;
+  const pct = total > 0 ? Math.round((done / total) * 100) : 0;
+
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressStat').innerHTML = `<strong>${pct}%</strong> complete`;
+  document.getElementById('progressCount').textContent = `${done} of ${total} tasks`;
+
+  // Move mascot along progress bar
+  const mascot = document.getElementById('mascot');
+  if (mascot) {
+    mascot.style.left = `calc(${pct}% - 10px)`;
+  }
+
+  // Dynamic hero gradient based on progress
+  const hero = document.querySelector('.hero');
+  if (hero) {
+    if (pct < 25) {
+      hero.style.background = 'linear-gradient(135deg, #FDE8D0 0%, #FDECD4 30%, #FBF0E0 60%, var(--bg) 100%)';
+    } else if (pct < 50) {
+      hero.style.background = 'linear-gradient(135deg, #FEF3C7 0%, #FDE68A 30%, #FBF0E0 60%, var(--bg) 100%)';
+    } else if (pct < 75) {
+      hero.style.background = 'linear-gradient(135deg, #FFEDD5 0%, #FDBA74 25%, #FDE68A 50%, var(--bg) 100%)';
+    } else {
+      hero.style.background = 'linear-gradient(135deg, #FECDD3 0%, #FDA4AF 20%, #FDBA74 50%, var(--bg) 100%)';
+    }
+  }
+
+  // Check milestones
+  checkMilestone(pct);
+}
+
+// ════════════════════════════════════
+// CONFETTI
+// ════════════════════════════════════
+function createConfetti(element) {
+  const rect = element.getBoundingClientRect();
+  const container = document.createElement('div');
+  container.className = 'confetti-container';
+  container.style.left = (rect.left + rect.width / 2) + 'px';
+  container.style.top = (rect.top + rect.height / 2) + 'px';
+  document.body.appendChild(container);
+
+  const colors = ['#D97706', '#EF4444', '#6B9B76', '#8B5CF6', '#F59E0B', '#EC4899', '#0EA5E9'];
+  const shapes = ['circle', 'square', 'circle', 'square', 'star'];
+
+  for (let i = 0; i < 16; i++) {
+    const piece = document.createElement('div');
+    const shape = shapes[Math.floor(Math.random() * shapes.length)];
+    piece.className = `confetti-piece ${shape}`;
+    piece.style.background = colors[Math.floor(Math.random() * colors.length)];
+    const angle = (i / 16) * Math.PI * 2 + (Math.random() - 0.5) * 0.5;
+    const dist = 50 + Math.random() * 80;
+    piece.style.setProperty('--tx', Math.cos(angle) * dist + 'px');
+    piece.style.setProperty('--ty', Math.sin(angle) * dist - 30 + 'px');
+    piece.style.setProperty('--rot', (Math.random() * 720 - 360) + 'deg');
+    piece.style.animationDelay = (Math.random() * 0.15) + 's';
+    piece.style.width = (5 + Math.random() * 6) + 'px';
+    piece.style.height = piece.style.width;
+    container.appendChild(piece);
+  }
+
+  setTimeout(() => container.remove(), 1200);
+}
+
+// ════════════════════════════════════
+// MASCOT CELEBRATION
+// ════════════════════════════════════
+function triggerMascotCelebration() {
+  const mascot = document.getElementById('mascot');
+  if (!mascot) return;
+  mascot.classList.remove('celebrate');
+  void mascot.offsetWidth; // force reflow
+  mascot.classList.add('celebrate');
+  setTimeout(() => mascot.classList.remove('celebrate'), 700);
+}
+
+// ════════════════════════════════════
+// TOAST MESSAGES
+// ════════════════════════════════════
+const funMessages = [
+  { emoji: '✨', text: 'One step closer to India!' },
+  { emoji: '🎉', text: 'Nice! Keep that momentum going' },
+  { emoji: '🚀', text: 'You\'re on a roll!' },
+  { emoji: '🌏', text: 'India has 22 official languages' },
+  { emoji: '✅', text: 'Another one bites the dust' },
+  { emoji: '💪', text: 'Moving pros in the making' },
+  { emoji: '🎋', text: 'Bangalore was founded in 1537' },
+  { emoji: '🧳', text: 'Pack light, travel far' },
+  { emoji: '🌸', text: 'New beginnings are beautiful' },
+  { emoji: '🛫', text: 'Cleared for takeoff... almost!' },
+  { emoji: '🍛', text: 'Biryani awaits you' },
+  { emoji: '🏔️', text: 'India has 7,517km of coastline' },
+  { emoji: '🎯', text: 'Focused and crushing it' },
+  { emoji: '☕', text: 'Filter coffee in your future' },
+  { emoji: '🐘', text: 'India is home to 70% of the world\'s tigers' },
+  { emoji: '🌅', text: 'Adventure is calling' },
+];
+
+const milestoneMessages = {
+  25: { emoji: '🏁', text: 'Quarter of the way there! Amazing!' },
+  50: { emoji: '🎊', text: 'HALFWAY DONE! You\'re unstoppable!' },
+  75: { emoji: '🔥', text: 'Three quarters done — the finish line is near!' },
+  100: { emoji: '🎆', text: 'ALL TASKS COMPLETE! You did it!!!' },
+};
+
+let lastMilestone = 0;
+
+function showRandomToast() {
+  const msg = funMessages[Math.floor(Math.random() * funMessages.length)];
+  showToast(msg.emoji, msg.text, false);
+}
+
+function checkMilestone(pct) {
+  [25, 50, 75, 100].forEach(m => {
+    if (pct >= m && lastMilestone < m) {
+      lastMilestone = m;
+      setTimeout(() => {
+        const msg = milestoneMessages[m];
+        showToast(msg.emoji, msg.text, true);
+      }, 500);
+    }
+  });
+}
+
+function showToast(emoji, text, isMilestone) {
+  const container = document.getElementById('toastContainer');
+  const toast = document.createElement('div');
+  toast.className = `toast ${isMilestone ? 'milestone' : ''}`;
+  toast.innerHTML = `<span class="toast-emoji">${emoji}</span>${text}`;
+  container.appendChild(toast);
+  setTimeout(() => toast.remove(), 3200);
+}
+
+function updateCountdown() {
+  // Set to zero until an actual move date is provided
+  document.getElementById('cd-days').textContent = '0';
+  document.getElementById('cd-hours').textContent = '00';
+  document.getElementById('cd-mins').textContent = '00';
+}
+
+function initNotes() {
+  const textarea = document.getElementById('movingNotes');
+  textarea.value = state.notes || '';
+  textarea.addEventListener('input', () => { state.notes = textarea.value; saveState(); });
+}
+
+// ════════════════════════════════════
+// SECTION / TAB MANAGEMENT
+// ════════════════════════════════════
+const builtInTabs = [
+  { id: 'todo', name: 'To Do' },
+  { id: 'sell', name: 'To Sell/Donate' },
+  { id: 'buy', name: 'To Buy' },
+  { id: 'pack', name: 'To Pack/Ship' },
+  { id: 'address', name: 'Address Update' },
+];
+
+let activeSection = 'todo';
+
+function switchSection(id) {
+  activeSection = id;
+  document.querySelectorAll('.section-content').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.section-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('section-' + id)?.classList.add('active');
+  document.querySelector(`.section-tab[data-id="${id}"]`)?.classList.add('active');
+}
+
+function renderTabs() {
+  const group = document.getElementById('sectionTabGroup');
+  if (!state.customTabs) state.customTabs = [];
+
+  const allTabs = [...builtInTabs, ...state.customTabs];
+  group.innerHTML = allTabs.map(tab => {
+    const isCustom = state.customTabs.some(t => t.id === tab.id);
+    const isActive = tab.id === activeSection;
+    return `<button class="section-tab ${isActive ? 'active' : ''}" data-id="${tab.id}" onclick="switchSection('${tab.id}')">
+      ${tab.name}
+      ${isCustom ? `<span class="tab-delete" onclick="event.stopPropagation(); deleteTab('${tab.id}')" title="Delete tab">×</span>` : ''}
+    </button>`;
+  }).join('');
+
+  // Render custom tab content
+  const container = document.getElementById('customTabsContainer');
+  container.innerHTML = state.customTabs.map(tab => {
+    const items = tab.items || [];
+    return `<div class="section-content ${tab.id === activeSection ? 'active' : ''}" id="section-${tab.id}">
+      <div class="data-section">
+        <div class="data-card">
+          <div class="data-card-header">📋 ${tab.name}</div>
+          ${items.map((item, idx) => {
+            const key = 'custom_' + tab.id + '_' + idx;
+            const checked = isItemChecked(key);
+            return `<div class="checklist-item ${checked ? 'row-done' : ''}">
+              <input type="checkbox" class="task-checkbox" ${checked ? 'checked' : ''} onchange="toggleCheckedItem('${key}', this)">
+              <span class="editable-text" onclick="editCell(this,'${key}_text')">${getEdited(key+'_text', item)}</span>
+              <button style="background:none;border:none;cursor:pointer;color:var(--text-muted);font-size:0.9rem;padding:2px 6px;opacity:0.4;margin-left:auto" onclick="deleteCustomItem('${tab.id}',${idx})" title="Remove item"
+                onmouseover="this.style.opacity=1;this.style.color='var(--high)'" onmouseout="this.style.opacity=0.4;this.style.color='var(--text-muted)'">×</button>
+            </div>`;
+          }).join('')}
+          <button class="add-task-btn" onclick="addCustomItem('${tab.id}')">+ Add item</button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function promptAddTab() {
+  const group = document.getElementById('sectionTabGroup');
+  // Check if input already exists
+  if (document.querySelector('.tab-name-input')) return;
+
+  const input = document.createElement('input');
+  input.type = 'text';
+  input.className = 'tab-name-input';
+  input.placeholder = 'Tab name...';
+
+  const finish = () => {
+    const name = input.value.trim();
+    if (name) {
+      const id = 'custom_' + Date.now();
+      if (!state.customTabs) state.customTabs = [];
+      state.customTabs.push({ id, name, items: [] });
+      saveState();
+      activeSection = id;
+      renderTabs();
+      switchSection(id);
+    } else {
+      input.remove();
+    }
+  };
+
+  input.addEventListener('blur', finish);
+  input.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') input.blur();
+    if (e.key === 'Escape') { input.value = ''; input.blur(); }
+  });
+
+  group.appendChild(input);
+  input.focus();
+}
+
+function deleteTab(tabId) {
+  if (!confirm('Delete this tab and all its items?')) return;
+  state.customTabs = state.customTabs.filter(t => t.id !== tabId);
+  saveState();
+  if (activeSection === tabId) activeSection = 'todo';
+  renderTabs();
+  switchSection(activeSection);
+}
+
+function addRowToTab(tabName, defaultItem) {
+  if (!state.extraRows) state.extraRows = {};
+  if (!state.extraRows[tabName]) state.extraRows[tabName] = [];
+  state.extraRows[tabName].push(defaultItem);
+  saveState();
+  // Re-render the relevant tab
+  if (tabName === 'sell') renderSellDonate();
+  else if (tabName === 'buy') renderToBuy();
+  else if (tabName === 'pack') renderToPack();
+  else if (tabName === 'address') renderAddressUpdate();
+}
+
+function deleteRowFromTab(tabName, idx) {
+  if (!state.extraRows || !state.extraRows[tabName]) return;
+  state.extraRows[tabName].splice(idx, 1);
+  saveState();
+  if (tabName === 'sell') renderSellDonate();
+  else if (tabName === 'buy') renderToBuy();
+  else if (tabName === 'pack') renderToPack();
+  else if (tabName === 'address') renderAddressUpdate();
+}
+
+function getExtraRows(tabName) {
+  return (state.extraRows && state.extraRows[tabName]) || [];
+}
+
+function addCustomItem(tabId) {
+  const tab = state.customTabs.find(t => t.id === tabId);
+  if (!tab) return;
+  tab.items.push('New item');
+  saveState();
+  renderTabs();
+  switchSection(tabId);
+}
+
+function deleteCustomItem(tabId, idx) {
+  const tab = state.customTabs.find(t => t.id === tabId);
+  if (!tab) return;
+  tab.items.splice(idx, 1);
+  saveState();
+  renderTabs();
+  switchSection(tabId);
+}
+
+// ════════════════════════════════════
+// RENDER OTHER TABS DATA
+// ════════════════════════════════════
+function editCell(el, storeKey) {
+  const original = el.textContent.trim();
+  const input = document.createElement('input');
+  input.type = 'text';
+  input.className = 'cell-input';
+  input.value = original;
+
+  const finish = () => {
+    const val = input.value.trim();
+    el.textContent = val || original;
+    if (val !== original) {
+      if (!state.editedItems) state.editedItems = {};
+      state.editedItems[storeKey] = val;
+      saveState();
+    }
+  };
+
+  input.addEventListener('blur', finish);
+  input.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') input.blur();
+    if (e.key === 'Escape') { input.value = original; input.blur(); }
+  });
+
+  el.textContent = '';
+  el.appendChild(input);
+  input.focus();
+  input.select();
+}
+
+function getEdited(key, fallback) {
+  return (state.editedItems && state.editedItems[key]) ?? fallback;
+}
+
+function toggleCheckedItem(key, checkbox) {
+  if (!state.checkedItems) state.checkedItems = {};
+  state.checkedItems[key] = checkbox.checked;
+  const row = checkbox.closest('tr') || checkbox.closest('.checklist-item');
+  if (row) row.classList.toggle('row-done', checkbox.checked);
+  saveState();
+}
+
+function isItemChecked(key) {
+  return state.checkedItems && state.checkedItems[key];
+}
+
+function renderSellDonate() {
+  const items = [
+    { item: 'LED Face Mask', age: '2 yrs', cost: '$80', action: 'Sell', qty: 1 },
+    { item: 'Dyson hair dryer', age: '2 yrs', cost: '$150', action: 'Sell', qty: 1 },
+    { item: 'Room Bed', age: '7 yrs', cost: '$50', action: 'Sell', qty: 2 },
+    { item: 'Room Mattress', age: '7 yrs', cost: '', action: 'Give', qty: 2 },
+    { item: 'Room Monitor', age: '5 yrs', cost: '', action: 'Sell', qty: 2 },
+    { item: 'Room Table (sup)', age: '5 yrs', cost: '$50', action: 'Sell', qty: 1 },
+    { item: 'Room Table (kusum)', age: '5 yrs', cost: '$30', action: 'Sell', qty: 1 },
+    { item: 'Room Chair', age: '5 yrs', cost: '$10', action: 'Sell', qty: 2 },
+    { item: 'Room Side table', age: '3 yrs', cost: '$25', action: 'Sell', qty: 3 },
+    { item: 'Closet side table', age: '5 yrs', cost: '$5', action: 'Sell', qty: 2 },
+    { item: 'TV', age: '7 yrs', cost: '$70', action: 'Sell', qty: 2 },
+    { item: '9 cube organizer', age: '5 yrs', cost: '$20', action: 'Sell', qty: 1 },
+    { item: 'Piano + stand + seat', age: '1 yr', cost: '$50', action: 'Sell', qty: 1 },
+    { item: 'Twin Mattresses', age: '4 yrs', cost: '$30', action: 'Sell', qty: 2 },
+    { item: 'Walmart chairs', age: '4 yrs', cost: '$5', action: 'Sell', qty: 2 },
+    { item: 'Hall drawers', age: '3 yrs', cost: '$5', action: 'Sell', qty: 1 },
+    { item: 'Hall side table', age: '3 yrs', cost: '$15', action: 'Sell', qty: 1 },
+    { item: 'Hall center table', age: '6 yrs', cost: '$20', action: 'Sell', qty: 1 },
+    { item: 'Paint table', age: '6 yrs', cost: '$5', action: 'Sell', qty: 1 },
+    { item: 'Snack stand', age: '3 yrs', cost: '$15', action: 'Sell', qty: 1 },
+    { item: 'Pedicure machine', age: '1 yr', cost: '', action: 'Sell', qty: 1 },
+    { item: 'Key stand', age: '4 yrs', cost: '', action: 'Give', qty: 1, note: 'Srilu' },
+    { item: 'Instapot', age: '6 yrs', cost: '', action: 'Give', qty: 1 },
+    { item: 'Cookers', age: '8 yrs', cost: '', action: 'Give', qty: 2 },
+    { item: 'Mini idli tray', age: '3 yrs', cost: '', action: 'Give', qty: 1, note: 'Srilu' },
+    { item: 'Idli cooker', age: '2 yrs', cost: '', action: 'Give', qty: 1 },
+    { item: 'Heart waffle machine', age: '5 yrs', cost: '', action: 'Give', qty: 1, note: 'Srilu' },
+    { item: 'Toaster', age: '6 yrs', cost: '', action: 'Give', qty: 1, note: 'Kommi' },
+    { item: 'Air fryer', age: '5 yrs', cost: '', action: 'Give', qty: 1 },
+    { item: 'Rice cooker', age: '4 yrs', cost: '$10', action: 'Donate', qty: 1 },
+    { item: 'Egg boiler', age: '3 yrs', cost: '$10', action: 'Give', qty: 1, note: 'Kundi?' },
+    { item: 'Ottoman', age: '7 yrs', cost: '', action: 'Sell', qty: 2 },
+    { item: 'Blender', age: '3 yrs', cost: '$10', action: 'Sell', qty: 1 },
+    { item: 'Kettle', age: '3 yrs', cost: '$10', action: 'Sell', qty: 1 },
+    { item: '6 drawer organizer', age: '4 yrs', cost: '$50', action: 'Sell', qty: 1 },
+    { item: '3 drawer organizer', age: '8 yrs', cost: '$10', action: 'Sell', qty: 1 },
+    { item: 'Swing set', age: '5 yrs', cost: '$70', action: 'Sell', qty: 2 },
+    { item: 'Sofa', age: '3 yrs', cost: '$200', action: 'Sell', qty: 1 },
+    { item: 'Wire organizer', age: '4 yrs', cost: '$10', action: 'Sell/Give', qty: 2 },
+    { item: 'Karaoke machine', age: '', cost: '', action: 'Give', qty: 1, note: 'Kundi' },
+    { item: 'Steel plate', age: '', cost: '', action: 'Give', qty: 2, note: 'Srilu' },
+    { item: 'Picture frames', age: '', cost: '', action: 'Give', qty: 5, note: 'Srilu' },
+    { item: 'Kitchen items', age: '', cost: '', action: 'Give/Donate', qty: '' },
+    { item: 'Water dispenser', age: '1 yr', cost: '', action: 'Sell', qty: 1 },
+    { item: 'Blackboard/thumb board', age: '5 yrs', cost: '$5', action: 'Sell', qty: 1 },
+    { item: 'Dyson vacuum cleaner', age: '6 yrs', cost: '$120', action: 'Sell', qty: 1 },
+    { item: 'Eufy', age: '1 yr', cost: '', action: 'Sell', qty: 1 },
+    { item: 'Amazon Ring', age: '2 yrs', cost: '$50', action: 'Sell', qty: 1 },
+    { item: 'Mirrors', age: '4 yrs', cost: '$30', action: 'Sell', qty: 2 },
+  ];
+
+  const tagClass = (a) => {
+    const al = a.toLowerCase();
+    if (al.includes('sell')) return 'tag-sell';
+    if (al.includes('donate')) return 'tag-donate';
+    return 'tag-give';
+  };
+
+  document.getElementById('sellContainer').innerHTML = `
+    <div class="data-card">
+      <div class="data-card-header">🏷️ Items to Sell / Donate / Give Away</div>
+      <table class="data-table">
+        <thead><tr><th style="width:30px"></th><th>Item</th><th>Age</th><th>Price</th><th>Action</th><th>Qty</th><th>Note</th></tr></thead>
+        <tbody>${items.map((i, idx) => {
+          const key = 'sell_' + idx;
+          const checked = isItemChecked(key);
+          return `<tr class="${checked ? 'row-done' : ''}">
+          <td><input type="checkbox" class="task-checkbox" ${checked ? 'checked' : ''} onchange="toggleCheckedItem('${key}', this)"></td>
+          <td class="editable" onclick="editCell(this,'${key}_item')">${getEdited(key+'_item', i.item)}</td>
+          <td class="editable" onclick="editCell(this,'${key}_age')">${getEdited(key+'_age', i.age || '—')}</td>
+          <td class="editable" onclick="editCell(this,'${key}_cost')">${getEdited(key+'_cost', i.cost || '—')}</td>
+          <td class="editable" onclick="editCell(this,'${key}_action')">${getEdited(key+'_action', i.action)}</td>
+          <td class="editable" onclick="editCell(this,'${key}_qty')">${getEdited(key+'_qty', i.qty || '')}</td>
+          <td class="editable" style="color:var(--text-muted);font-size:0.78rem" onclick="editCell(this,'${key}_note')">${getEdited(key+'_note', i.note || '')}</td>
+        </tr>`;
+        }).join('')}${getExtraRows('sell').map((row, idx) => {
+          const key = 'sell_extra_' + idx;
+          const checked = isItemChecked(key);
+          return `<tr class="${checked ? 'row-done' : ''}">
+          <td><input type="checkbox" class="task-checkbox" ${checked ? 'checked' : ''} onchange="toggleCheckedItem('${key}', this)"></td>
+          <td class="editable" onclick="editCell(this,'${key}_item')">${getEdited(key+'_item', row.item || 'New item')}</td>
+          <td class="editable" onclick="editCell(this,'${key}_age')">${getEdited(key+'_age', row.age || '—')}</td>
+          <td class="editable" onclick="editCell(this,'${key}_cost')">${getEdited(key+'_cost', row.cost || '—')}</td>
+          <td class="editable" onclick="editCell(this,'${key}_action')">${getEdited(key+'_action', row.action || 'Sell')}</td>
+          <td class="editable" onclick="editCell(this,'${key}_qty')">${getEdited(key+'_qty', row.qty || '1')}</td>
+          <td class="editable" style="color:var(--text-muted);font-size:0.78rem" onclick="editCell(this,'${key}_note')">${getEdited(key+'_note', row.note || '')}</td>
+        </tr>`;
+        }).join('')}</tbody>
+      </table>
+      <button class="add-task-btn" onclick="addRowToTab('sell', {item:'New item', age:'', cost:'', action:'Sell', qty:'1', note:''})">+ Add row</button>
+    </div>`;
+}
+
+function renderToBuy() {
+  const items = ['Kleenex travel tissue', 'Gel deodorant', 'Small toolkit', 'Vacuum seal bags', 'Boxes', 'Poster roller'];
+  document.getElementById('buyContainer').innerHTML = `
+    <div class="data-card">
+      <div class="data-card-header">🛒 Items to Buy Before Moving</div>
+      ${items.map((i, idx) => {
+        const key = 'buy_' + idx;
+        const checked = isItemChecked(key);
+        return `<div class="checklist-item ${checked ? 'row-done' : ''}">
+          <input type="checkbox" class="task-checkbox" ${checked ? 'checked' : ''} onchange="toggleCheckedItem('${key}', this)">
+          <span class="editable-text" onclick="editCell(this,'${key}_text')">${getEdited(key+'_text', i)}</span>
+        </div>`;
+      }).join('')}
+      ${getExtraRows('buy').map((row, idx) => {
+        const key = 'buy_extra_' + idx;
+        const checked = isItemChecked(key);
+        return `<div class="checklist-item ${checked ? 'row-done' : ''}">
+          <input type="checkbox" class="task-checkbox" ${checked ? 'checked' : ''} onchange="toggleCheckedItem('${key}', this)">
+          <span class="editable-text" onclick="editCell(this,'${key}_text')">${getEdited(key+'_text', row)}</span>
+        </div>`;
+      }).join('')}
+      <button class="add-task-btn" onclick="addRowToTab('buy', 'New item')">+ Add item</button>
+    </div>`;
+}
+
+function renderToPack() {
+  const categories = {
+    'Clothing & Accessories': [
+      { item: 'Clothes', transport: 'Checked luggage / Sea', notes: 'Essentials in luggage, bulk via sea' },
+      { item: 'Shoes', transport: 'Checked luggage / Sea', notes: 'Pack in shoe bags or boxes' },
+      { item: 'Bags / Purses', transport: 'Checked luggage / Sea', notes: 'Keep valuable bags in carry-on' },
+    ],
+    'Toiletries & Personal Care': [
+      { item: 'Haircare', transport: 'Carry-on / Checked', notes: 'Liquids >100ml must be checked' },
+      { item: 'Hair tools (Dyson, straightener)', transport: 'Carry-on (dual voltage)', notes: 'Only dual voltage tools' },
+      { item: 'Perfumes', transport: 'Carry-on / Checked', notes: 'Fragile; pack in sealable bags' },
+      { item: 'Makeup', transport: 'Carry-on / Checked', notes: 'Liquids <100ml in carry-on' },
+      { item: 'Skincare', transport: 'Carry-on / Checked', notes: 'Bulk via checked luggage' },
+      { item: 'Medicines', transport: 'Carry-on', notes: 'Bring prescriptions + generics' },
+    ],
+    'Electronics': [
+      { item: 'Laptops', transport: 'Carry-on', notes: 'Keep with you at all times' },
+      { item: 'Keyboard / Mouse', transport: 'Checked / Carry-on', notes: 'Padded box recommended' },
+      { item: 'Chargers', transport: 'Carry-on', notes: 'Include adapters for India' },
+      { item: 'Extension board', transport: 'Checked', notes: 'Check plug type' },
+      { item: 'Google Home', transport: 'Checked', notes: '' },
+      { item: 'Chromecast', transport: 'Checked', notes: '' },
+    ],
+    'Art Supplies': [
+      { item: 'Paint', transport: 'Sea', notes: 'Flammable; check customs' },
+      { item: 'Paint brushes', transport: 'Sea / Checked', notes: 'Wrap in protective tube' },
+      { item: 'Canvas (small/medium)', transport: 'Checked / Sea', notes: 'Wrap edges with cardboard' },
+      { item: 'Canvas (large)', transport: 'Sea', notes: 'Pack upright; bubble wrap' },
+      { item: 'Sketch books', transport: 'Sea', notes: 'Stack in boxes' },
+      { item: 'Easel', transport: 'Sea', notes: 'Disassemble if possible' },
+    ],
+    'Games & Puzzles': [
+      { item: '3D puzzles', transport: 'Sea / Checked', notes: 'Wrap fragile pieces' },
+      { item: 'LEGO sets', transport: 'Sea', notes: 'Pack in original box' },
+      { item: 'Games', transport: 'Sea / Checked', notes: 'Board games may be heavy' },
+    ],
+    'Jewelry & Valuables': [
+      { item: 'Jewelry', transport: 'Carry-on', notes: 'Keep in small pouch' },
+    ],
+    'Kitchenware': [
+      { item: 'Coffee mugs', transport: 'Sea', notes: 'Bubble wrap; double-box' },
+      { item: 'Chopsticks', transport: 'Sea / Checked', notes: 'Sturdy container' },
+      { item: 'Bowl', transport: 'Sea', notes: 'Fragile; bubble wrap' },
+      { item: 'Spice racks', transport: 'Sea', notes: 'Disassemble if possible' },
+      { item: 'Kitchen storage boxes', transport: 'Sea', notes: 'Pack light items inside' },
+      { item: 'Fridge magnets', transport: 'Sea / Checked', notes: 'Wrap individually' },
+    ],
+    'Books & Stationery': [
+      { item: 'Books', transport: 'Sea', notes: 'Heavy; pack in small boxes' },
+    ],
+    'Home Furniture': [
+      { item: 'Office chair', transport: 'Sea', notes: 'Disassemble for shipping' },
+      { item: 'Side table', transport: 'Sea', notes: 'Wrap corners' },
+      { item: 'Comforter', transport: 'Sea / Checked', notes: 'Vacuum-seal bags' },
+    ],
+  };
+
+  let html = '';
+  let packIdx = 0;
+  for (const [cat, items] of Object.entries(categories)) {
+    html += `<div class="data-card" style="margin-bottom:16px">
+      <div class="data-card-header">📦 ${cat}</div>
+      <table class="data-table">
+        <thead><tr><th style="width:30px"></th><th>Item</th><th>Transport</th><th>Notes</th></tr></thead>
+        <tbody>${items.map(i => {
+          const key = 'pack_' + packIdx++;
+          const checked = isItemChecked(key);
+          return `<tr class="${checked ? 'row-done' : ''}">
+          <td><input type="checkbox" class="task-checkbox" ${checked ? 'checked' : ''} onchange="toggleCheckedItem('${key}', this)"></td>
+          <td class="editable" onclick="editCell(this,'${key}_item')">${getEdited(key+'_item', i.item)}</td>
+          <td class="editable" style="color:var(--accent);font-weight:500;font-size:0.78rem" onclick="editCell(this,'${key}_transport')">${getEdited(key+'_transport', i.transport)}</td>
+          <td class="editable" style="color:var(--text-secondary);font-size:0.78rem" onclick="editCell(this,'${key}_notes')">${getEdited(key+'_notes', i.notes)}</td>
+        </tr>`;
+        }).join('')}</tbody>
+      </table>
+    </div>`;
+  }
+  // Extra pack rows (generic, not category-specific)
+  const extraPack = getExtraRows('pack');
+  if (extraPack.length > 0) {
+    html += `<div class="data-card" style="margin-bottom:16px">
+      <div class="data-card-header">📦 Additional Items</div>
+      <table class="data-table">
+        <thead><tr><th style="width:30px"></th><th>Item</th><th>Transport</th><th>Notes</th></tr></thead>
+        <tbody>${extraPack.map((row, idx) => {
+          const key = 'pack_extra_' + idx;
+          const checked = isItemChecked(key);
+          return `<tr class="${checked ? 'row-done' : ''}">
+          <td><input type="checkbox" class="task-checkbox" ${checked ? 'checked' : ''} onchange="toggleCheckedItem('${key}', this)"></td>
+          <td class="editable" onclick="editCell(this,'${key}_item')">${getEdited(key+'_item', row.item || 'New item')}</td>
+          <td class="editable" style="color:var(--accent);font-weight:500;font-size:0.78rem" onclick="editCell(this,'${key}_transport')">${getEdited(key+'_transport', row.transport || 'Checked')}</td>
+          <td class="editable" style="color:var(--text-secondary);font-size:0.78rem" onclick="editCell(this,'${key}_notes')">${getEdited(key+'_notes', row.notes || '')}</td>
+        </tr>`;
+        }).join('')}</tbody>
+      </table>
+    </div>`;
+  }
+  html += `<button class="add-task-btn" style="max-width:720px;margin:0 auto 16px;display:flex" onclick="addRowToTab('pack', {item:'New item', transport:'Checked', notes:''})">+ Add item</button>`;
+  document.getElementById('packContainer').innerHTML = html;
+}
+
+function renderAddressUpdate() {
+  const accounts = [
+    'Chase', 'American Express', 'Charles Schwab', 'Fidelity', 'Discover',
+    'Apple Card', 'Cancel Old Navy card', 'Remitly', 'Venmo', 'Principal',
+    'Health Equity', 'USPS', 'IRS', 'SEVIS'
+  ];
+  document.getElementById('addressContainer').innerHTML = `
+    <div class="data-card">
+      <div class="data-card-header">📬 Accounts to Update Address</div>
+      ${accounts.map((a, idx) => {
+        const key = 'addr_' + idx;
+        const checked = isItemChecked(key);
+        return `<div class="checklist-item ${checked ? 'row-done' : ''}">
+          <input type="checkbox" class="task-checkbox" ${checked ? 'checked' : ''} onchange="toggleCheckedItem('${key}', this)">
+          <span class="editable-text" onclick="editCell(this,'${key}_text')">${getEdited(key+'_text', a)}</span>
+        </div>`;
+      }).join('')}
+      ${getExtraRows('address').map((row, idx) => {
+        const key = 'addr_extra_' + idx;
+        const checked = isItemChecked(key);
+        return `<div class="checklist-item ${checked ? 'row-done' : ''}">
+          <input type="checkbox" class="task-checkbox" ${checked ? 'checked' : ''} onchange="toggleCheckedItem('${key}', this)">
+          <span class="editable-text" onclick="editCell(this,'${key}_text')">${getEdited(key+'_text', row)}</span>
+        </div>`;
+      }).join('')}
+      <button class="add-task-btn" onclick="addRowToTab('address', 'New account')">+ Add account</button>
+    </div>`;
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  renderCategories();
+  updateCountdown();
+  setInterval(updateCountdown, 1000);
+  initNotes();
+  // Load saved state from server (overwrites defaults if data exists)
+  loadStateFromServer();
+  // Render tabs and other tab data
+  renderTabs();
+  renderSellDonate();
+  renderToBuy();
+  renderToPack();
+  renderAddressUpdate();
+});
+</script>
+</body>
+</html>
