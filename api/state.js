@@ -21,7 +21,7 @@ export default async function handler(req, res) {
       res.setHeader('Cache-Control', 'no-cache');
       res.status(200).json(data ? JSON.parse(data) : {});
     } catch (e) {
-      res.status(500).json({ error: e.message });
+      res.status(500).json({ error: 'Failed to load' });
     }
   } else if (req.method === 'POST') {
     try {
@@ -29,7 +29,7 @@ export default async function handler(req, res) {
       await redis.set(STATE_KEY, JSON.stringify(req.body));
       res.status(200).json({ ok: true });
     } catch (e) {
-      res.status(500).json({ error: e.message });
+      res.status(500).json({ error: 'Failed to save' });
     }
   } else {
     res.status(405).json({ error: 'Method not allowed' });
