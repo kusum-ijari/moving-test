@@ -165,6 +165,53 @@ body {
   margin-top: 2px;
 }
 
+.countdown-date-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border-light);
+}
+
+.countdown-date-display {
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  cursor: pointer;
+  padding: 4px 12px;
+  border-radius: 6px;
+  transition: all 0.15s ease;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.countdown-date-display:hover {
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
+.countdown-date-display .edit-icon {
+  font-size: 0.75rem;
+  opacity: 0.5;
+}
+
+.countdown-date-input {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 500;
+  padding: 6px 12px;
+  border: 2px solid var(--accent);
+  border-radius: 8px;
+  outline: none;
+  background: var(--surface);
+  color: var(--text);
+  box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.08);
+  cursor: pointer;
+}
+
 /* ════════════════════════════════════
    PROGRESS BAR
    ════════════════════════════════════ */
@@ -1368,6 +1415,11 @@ body {
         <div class="label">Min</div>
       </div>
     </div>
+    <div class="countdown-date-row" id="countdownDateRow">
+      <span class="countdown-date-display" onclick="showDatePicker()" id="dateDisplay">
+        <span class="edit-icon">✏️</span> Set move date
+      </span>
+    </div>
   </div>
 </section>
 
@@ -1871,10 +1923,70 @@ function showToast(emoji, text, isMilestone) {
 }
 
 function updateCountdown() {
-  // Set to zero until an actual move date is provided
-  document.getElementById('cd-days').textContent = '0';
-  document.getElementById('cd-hours').textContent = '00';
-  document.getElementById('cd-mins').textContent = '00';
+  const moveDate = state.moveDate ? new Date(state.moveDate) : null;
+  const display = document.getElementById('dateDisplay');
+
+  if (!moveDate) {
+    document.getElementById('cd-days').textContent = '0';
+    document.getElementById('cd-hours').textContent = '00';
+    document.getElementById('cd-mins').textContent = '00';
+    if (display) display.innerHTML = '<span class="edit-icon">✏️</span> Set move date';
+    return;
+  }
+
+  // Update display text
+  if (display && !document.querySelector('.countdown-date-input')) {
+    display.innerHTML = `<span class="edit-icon">✏️</span> ${moveDate.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}`;
+  }
+
+  const now = new Date();
+  const diff = moveDate - now;
+
+  if (diff <= 0) {
+    document.getElementById('cd-days').textContent = '0';
+    document.getElementById('cd-hours').textContent = '00';
+    document.getElementById('cd-mins').textContent = '00';
+    return;
+  }
+
+  document.getElementById('cd-days').textContent = Math.floor(diff / (1000*60*60*24));
+  document.getElementById('cd-hours').textContent = String(Math.floor((diff/(1000*60*60))%24)).padStart(2,'0');
+  document.getElementById('cd-mins').textContent = String(Math.floor((diff/(1000*60))%60)).padStart(2,'0');
+}
+
+function showDatePicker() {
+  const row = document.getElementById('countdownDateRow');
+  const existing = state.moveDate ? state.moveDate.split('T')[0] : '';
+
+  row.innerHTML = `
+    <input type="date" class="countdown-date-input" id="moveDateInput" value="${existing}">
+    <button style="padding:6px 14px;border:none;border-radius:8px;background:var(--accent);color:white;font-weight:600;font-size:0.82rem;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif" onclick="saveMoveDate()">Save</button>
+    <button style="padding:6px 10px;border:none;border-radius:8px;background:var(--border-light);color:var(--text-secondary);font-size:0.82rem;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif" onclick="cancelDatePicker()">Cancel</button>
+  `;
+  document.getElementById('moveDateInput').focus();
+}
+
+function saveMoveDate() {
+  const input = document.getElementById('moveDateInput');
+  const val = input.value;
+  if (val) {
+    state.moveDate = val + 'T10:00:00';
+  } else {
+    state.moveDate = null;
+  }
+  saveState();
+  restoreDateDisplay();
+  updateCountdown();
+}
+
+function cancelDatePicker() {
+  restoreDateDisplay();
+  updateCountdown();
+}
+
+function restoreDateDisplay() {
+  const row = document.getElementById('countdownDateRow');
+  row.innerHTML = `<span class="countdown-date-display" onclick="showDatePicker()" id="dateDisplay"></span>`;
 }
 
 function initNotes() {
