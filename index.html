@@ -867,31 +867,41 @@ body {
 /* ════════════════════════════════════
    PAPER PLANE MASCOT CHARACTER
    ════════════════════════════════════ */
-.plane-mascot {
+.plane-mascot-hero {
   display: inline-block;
   margin-bottom: 16px;
-  animation: planeFloat 4s ease-in-out infinite;
+}
+
+.plane-mascot-fixed {
+  position: fixed;
+  right: 24px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 100;
   cursor: pointer;
-  position: relative;
+  animation: planeFly 6s ease-in-out infinite;
+  transition: opacity 0.3s ease;
+  pointer-events: auto;
 }
 
-.plane-mascot:hover {
-  animation: planeWave 0.6s ease;
-}
-
-.plane-mascot svg {
-  filter: drop-shadow(0 6px 16px rgba(217, 119, 6, 0.18));
+.plane-mascot-fixed:hover svg {
+  transform: scale(1.15);
   transition: transform 0.3s ease;
 }
 
-.plane-mascot:hover svg {
-  transform: scale(1.08);
+.plane-mascot-fixed svg {
+  filter: drop-shadow(0 8px 20px rgba(217, 119, 6, 0.22));
+  transition: transform 0.3s ease;
 }
 
-@keyframes planeFloat {
-  0%, 100% { transform: translateY(0) rotate(-2deg); }
-  30% { transform: translateY(-10px) rotate(1deg); }
-  60% { transform: translateY(-4px) rotate(-1deg); }
+@keyframes planeFly {
+  0% { transform: translateY(-50%) translateX(0) rotate(-3deg); }
+  15% { transform: translateY(calc(-50% - 25px)) translateX(-8px) rotate(2deg); }
+  30% { transform: translateY(calc(-50% - 10px)) translateX(5px) rotate(-1deg); }
+  50% { transform: translateY(calc(-50% - 30px)) translateX(-5px) rotate(3deg); }
+  65% { transform: translateY(calc(-50% - 8px)) translateX(8px) rotate(-2deg); }
+  80% { transform: translateY(calc(-50% - 20px)) translateX(-3px) rotate(1deg); }
+  100% { transform: translateY(-50%) translateX(0) rotate(-3deg); }
 }
 
 @keyframes planeWave {
@@ -1258,6 +1268,8 @@ body {
   .mascot { font-size: 16px; top: -18px; }
   .toast { font-size: 0.78rem; padding: 10px 18px; }
   .section-tab { font-size: 0.75rem; padding: 6px 12px; }
+  .plane-mascot-fixed { right: 8px; }
+  .plane-mascot-fixed svg { width: 60px; height: 50px; }
   .data-table { font-size: 0.78rem; }
   .data-table th, .data-table td { padding: 8px 10px; }
 }
@@ -1265,10 +1277,31 @@ body {
 </head>
 <body>
 
+<!-- ════ FLOATING MASCOT ════ -->
+<div class="plane-mascot-fixed" id="planeMascotFixed" title="Hi! I'm Jet, your moving buddy!">
+  <svg width="90" height="75" viewBox="0 0 120 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M10 50 L60 20 L110 50 L60 45 Z" fill="#FBBF24" stroke="#D97706" stroke-width="2" stroke-linejoin="round"/>
+    <path d="M10 50 L60 45 L110 50 L60 70 Z" fill="#F59E0B" stroke="#D97706" stroke-width="2" stroke-linejoin="round"/>
+    <line x1="60" y1="20" x2="60" y2="70" stroke="#D97706" stroke-width="1.5" stroke-dasharray="3 2" opacity="0.4"/>
+    <g class="plane-eye"><ellipse cx="48" cy="42" rx="5" ry="5.5" fill="white"/><ellipse cx="48" cy="43" rx="3" ry="3.2" fill="#1F2937"/><circle cx="46.5" cy="41.5" r="1.2" fill="white"/></g>
+    <g class="plane-eye"><ellipse cx="72" cy="42" rx="5" ry="5.5" fill="white"/><ellipse cx="72" cy="43" rx="3" ry="3.2" fill="#1F2937"/><circle cx="70.5" cy="41.5" r="1.2" fill="white"/></g>
+    <circle cx="40" cy="49" r="4" fill="#FECDD3" opacity="0.7"/>
+    <circle cx="80" cy="49" r="4" fill="#FECDD3" opacity="0.7"/>
+    <path d="M52 52 Q60 60 68 52" stroke="#92400E" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+    <line x1="50" y1="70" x2="46" y2="85" stroke="#D97706" stroke-width="2.5" stroke-linecap="round"/>
+    <line x1="70" y1="70" x2="74" y2="85" stroke="#D97706" stroke-width="2.5" stroke-linecap="round"/>
+    <ellipse cx="44" cy="87" rx="5" ry="3" fill="#92400E"/>
+    <ellipse cx="76" cy="87" rx="5" ry="3" fill="#92400E"/>
+    <line x1="18" y1="50" x2="10" y2="38" stroke="#D97706" stroke-width="2.5" stroke-linecap="round"/>
+    <circle cx="9" cy="36" r="3" fill="#FBBF24" stroke="#D97706" stroke-width="1.5"/>
+    <g class="plane-arm-right"><line x1="100" y1="50" x2="108" y2="36" stroke="#D97706" stroke-width="2.5" stroke-linecap="round"/><circle cx="109" cy="34" r="3" fill="#FBBF24" stroke="#D97706" stroke-width="1.5"/></g>
+  </svg>
+</div>
+
 <!-- ════ HERO ════ -->
 <header class="hero">
-  <!-- Anthropomorphic Paper Plane Mascot -->
-  <div class="plane-mascot" id="planeMascot" title="Hi! I'm Jet, your moving buddy!">
+  <!-- Hero Mascot (static) -->
+  <div class="plane-mascot-hero">
     <svg width="120" height="100" viewBox="0 0 120 100" fill="none" xmlns="http://www.w3.org/2000/svg">
       <!-- Body (paper plane shape) -->
       <path d="M10 50 L60 20 L110 50 L60 45 Z" fill="#FBBF24" stroke="#D97706" stroke-width="2" stroke-linejoin="round"/>
@@ -1358,15 +1391,6 @@ body {
     </div>
   </div>
 </section>
-
-<!-- ════ PERSON TABS ════ -->
-<div class="person-tabs">
-  <div class="tab-group">
-    <button class="person-tab active" data-person="all" onclick="filterPerson('all')">All Tasks</button>
-    <button class="person-tab" data-person="person1" onclick="filterPerson('person1')">Person 1</button>
-    <button class="person-tab" data-person="person2" onclick="filterPerson('person2')">Person 2</button>
-  </div>
-</div>
 
 <!-- ════ SECTION TABS ════ -->
 <div class="section-tabs">
