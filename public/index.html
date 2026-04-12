@@ -1157,8 +1157,13 @@ body {
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-sm);
-  overflow: hidden;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
   margin-bottom: 16px;
+}
+
+.data-table {
+  min-width: 600px;
 }
 
 .data-card-header {
