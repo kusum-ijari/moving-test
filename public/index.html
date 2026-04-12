@@ -2129,17 +2129,31 @@ function addRowToTab(tabName, defaultItem) {
   if (!state.extraRows[tabName]) state.extraRows[tabName] = [];
   state.extraRows[tabName].push(defaultItem);
   saveState();
-  // Re-render the relevant tab
-  if (tabName === 'sell') renderSellDonate();
-  else if (tabName === 'buy') renderToBuy();
-  else if (tabName === 'pack') renderToPack();
-  else if (tabName === 'address') renderAddressUpdate();
+  reRenderTab(tabName);
+  // Scroll the new item into view
+  setTimeout(() => {
+    const container = document.getElementById(tabName + 'Container');
+    if (container) {
+      const lastItem = container.querySelector('.checklist-item:last-of-type, table tbody tr:last-child');
+      if (lastItem) lastItem.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  }, 50);
 }
 
 function deleteRowFromTab(tabName, idx) {
   if (!state.extraRows || !state.extraRows[tabName]) return;
   state.extraRows[tabName].splice(idx, 1);
   saveState();
+  reRenderTab(tabName);
+}
+
+function reRenderTab(tabName) {
+  if (tabName === 'sell') renderSellDonate();
+  else if (tabName === 'buy') renderToBuy();
+  else if (tabName === 'pack') renderToPack();
+  else if (tabName === 'address') renderAddressUpdate();
+  // Ensure active section stays visible
+  switchSection(activeSection);
   if (tabName === 'sell') renderSellDonate();
   else if (tabName === 'buy') renderToBuy();
   else if (tabName === 'pack') renderToPack();
