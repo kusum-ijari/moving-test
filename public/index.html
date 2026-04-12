@@ -1278,6 +1278,29 @@ body {
   text-decoration: line-through;
 }
 
+.row-delete-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  padding: 2px 6px;
+  opacity: 0;
+  transition: all 0.15s ease;
+  border-radius: 4px;
+}
+
+tr:hover .row-delete-btn,
+.checklist-item:hover .row-delete-btn {
+  opacity: 0.5;
+}
+
+.row-delete-btn:hover {
+  opacity: 1 !important;
+  color: var(--high);
+  background: rgba(239, 68, 68, 0.08);
+}
+
 .data-table td.editable,
 .checklist-item .editable-text {
   cursor: pointer;
@@ -1595,7 +1618,7 @@ let currentFilter = 'all';
 
 function loadState() {
   // Return defaults synchronously; async load overwrites from server
-  return { categories: defaultCategories, notes: '', collapsed: {}, checkedItems: {}, editedItems: {}, customTabs: [], extraRows: {} };
+  return { categories: defaultCategories, notes: '', collapsed: {}, checkedItems: {}, editedItems: {}, customTabs: [], extraRows: {}, deletedRows: {} };
 }
 
 async function loadStateFromServer() {
@@ -1607,6 +1630,10 @@ async function loadStateFromServer() {
       renderCategories();
       initNotes();
       renderTabs();
+      renderSellDonate();
+      renderToBuy();
+      renderToPack();
+      renderAddressUpdate();
     }
   } catch(e) {
     console.log('No saved state on server, using defaults');
@@ -2124,6 +2151,20 @@ function deleteTab(tabId) {
   switchSection(activeSection);
 }
 
+function deleteOriginalRow(tabName, idx) {
+  if (!state.deletedRows) state.deletedRows = {};
+  if (!state.deletedRows[tabName]) state.deletedRows[tabName] = [];
+  if (!state.deletedRows[tabName].includes(idx)) {
+    state.deletedRows[tabName].push(idx);
+  }
+  saveState();
+  reRenderTab(tabName);
+}
+
+function isRowDeleted(tabName, idx) {
+  return state.deletedRows && state.deletedRows[tabName] && state.deletedRows[tabName].includes(idx);
+}
+
 function addRowToTab(tabName, defaultItem) {
   if (!state.extraRows) state.extraRows = {};
   if (!state.extraRows[tabName]) state.extraRows[tabName] = [];
@@ -2294,8 +2335,9 @@ function renderSellDonate() {
     <div class="data-card">
       <div class="data-card-header">🏷️ Items to Sell / Donate / Give Away</div>
       <table class="data-table">
-        <thead><tr><th style="width:30px"></th><th>Item</th><th>Age</th><th>Price</th><th>Action</th><th>Qty</th><th>Note</th></tr></thead>
+        <thead><tr><th style="width:30px"></th><th>Item</th><th>Age</th><th>Price</th><th>Action</th><th>Qty</th><th>Note</th><th style="width:30px"></th></tr></thead>
         <tbody>${items.map((i, idx) => {
+          if (isRowDeleted('sell', idx)) return '';
           const key = 'sell_' + idx;
           const checked = isItemChecked(key);
           return `<tr class="${checked ? 'row-done' : ''}">
@@ -2306,6 +2348,7 @@ function renderSellDonate() {
           <td class="editable" onclick="editCell(this,'${key}_action')">${getEdited(key+'_action', i.action)}</td>
           <td class="editable" onclick="editCell(this,'${key}_qty')">${getEdited(key+'_qty', i.qty || '')}</td>
           <td class="editable" style="color:var(--text-muted);font-size:0.78rem" onclick="editCell(this,'${key}_note')">${getEdited(key+'_note', i.note || '')}</td>
+          <td><button class="row-delete-btn" onclick="deleteOriginalRow('sell',${idx})" title="Delete">×</button></td>
         </tr>`;
         }).join('')}${getExtraRows('sell').map((row, idx) => {
           const key = 'sell_extra_' + idx;
@@ -2318,6 +2361,7 @@ function renderSellDonate() {
           <td class="editable" onclick="editCell(this,'${key}_action')">${getEdited(key+'_action', row.action || 'Sell')}</td>
           <td class="editable" onclick="editCell(this,'${key}_qty')">${getEdited(key+'_qty', row.qty || '1')}</td>
           <td class="editable" style="color:var(--text-muted);font-size:0.78rem" onclick="editCell(this,'${key}_note')">${getEdited(key+'_note', row.note || '')}</td>
+          <td><button class="row-delete-btn" onclick="deleteRowFromTab('sell',${idx})" title="Delete">×</button></td>
         </tr>`;
         }).join('')}</tbody>
       </table>
@@ -2331,11 +2375,13 @@ function renderToBuy() {
     <div class="data-card">
       <div class="data-card-header">🛒 Items to Buy Before Moving</div>
       ${items.map((i, idx) => {
+        if (isRowDeleted('buy', idx)) return '';
         const key = 'buy_' + idx;
         const checked = isItemChecked(key);
         return `<div class="checklist-item ${checked ? 'row-done' : ''}">
           <input type="checkbox" class="task-checkbox" ${checked ? 'checked' : ''} onchange="toggleCheckedItem('${key}', this)">
           <span class="editable-text" onclick="editCell(this,'${key}_text')">${getEdited(key+'_text', i)}</span>
+          <button class="row-delete-btn" onclick="deleteOriginalRow('buy',${idx})" title="Delete">×</button>
         </div>`;
       }).join('')}
       ${getExtraRows('buy').map((row, idx) => {
@@ -2344,6 +2390,7 @@ function renderToBuy() {
         return `<div class="checklist-item ${checked ? 'row-done' : ''}">
           <input type="checkbox" class="task-checkbox" ${checked ? 'checked' : ''} onchange="toggleCheckedItem('${key}', this)">
           <span class="editable-text" onclick="editCell(this,'${key}_text')">${getEdited(key+'_text', row)}</span>
+          <button class="row-delete-btn" onclick="deleteRowFromTab('buy',${idx})" title="Delete">×</button>
         </div>`;
       }).join('')}
       <button class="add-task-btn" onclick="addRowToTab('buy', 'New item')">+ Add item</button>
@@ -2413,15 +2460,18 @@ function renderToPack() {
     html += `<div class="data-card" style="margin-bottom:16px">
       <div class="data-card-header">📦 ${cat}</div>
       <table class="data-table">
-        <thead><tr><th style="width:30px"></th><th>Item</th><th>Transport</th><th>Notes</th></tr></thead>
+        <thead><tr><th style="width:30px"></th><th>Item</th><th>Transport</th><th>Notes</th><th style="width:30px"></th></tr></thead>
         <tbody>${items.map(i => {
-          const key = 'pack_' + packIdx++;
+          const thisIdx = packIdx++;
+          if (isRowDeleted('pack', thisIdx)) return '';
+          const key = 'pack_' + thisIdx;
           const checked = isItemChecked(key);
           return `<tr class="${checked ? 'row-done' : ''}">
           <td><input type="checkbox" class="task-checkbox" ${checked ? 'checked' : ''} onchange="toggleCheckedItem('${key}', this)"></td>
           <td class="editable" onclick="editCell(this,'${key}_item')">${getEdited(key+'_item', i.item)}</td>
           <td class="editable" style="color:var(--accent);font-weight:500;font-size:0.78rem" onclick="editCell(this,'${key}_transport')">${getEdited(key+'_transport', i.transport)}</td>
           <td class="editable" style="color:var(--text-secondary);font-size:0.78rem" onclick="editCell(this,'${key}_notes')">${getEdited(key+'_notes', i.notes)}</td>
+          <td><button class="row-delete-btn" onclick="deleteOriginalRow('pack',${thisIdx})" title="Delete">×</button></td>
         </tr>`;
         }).join('')}</tbody>
       </table>
@@ -2433,7 +2483,7 @@ function renderToPack() {
     html += `<div class="data-card" style="margin-bottom:16px">
       <div class="data-card-header">📦 Additional Items</div>
       <table class="data-table">
-        <thead><tr><th style="width:30px"></th><th>Item</th><th>Transport</th><th>Notes</th></tr></thead>
+        <thead><tr><th style="width:30px"></th><th>Item</th><th>Transport</th><th>Notes</th><th style="width:30px"></th></tr></thead>
         <tbody>${extraPack.map((row, idx) => {
           const key = 'pack_extra_' + idx;
           const checked = isItemChecked(key);
@@ -2442,6 +2492,7 @@ function renderToPack() {
           <td class="editable" onclick="editCell(this,'${key}_item')">${getEdited(key+'_item', row.item || 'New item')}</td>
           <td class="editable" style="color:var(--accent);font-weight:500;font-size:0.78rem" onclick="editCell(this,'${key}_transport')">${getEdited(key+'_transport', row.transport || 'Checked')}</td>
           <td class="editable" style="color:var(--text-secondary);font-size:0.78rem" onclick="editCell(this,'${key}_notes')">${getEdited(key+'_notes', row.notes || '')}</td>
+          <td><button class="row-delete-btn" onclick="deleteRowFromTab('pack',${idx})" title="Delete">×</button></td>
         </tr>`;
         }).join('')}</tbody>
       </table>
@@ -2461,11 +2512,13 @@ function renderAddressUpdate() {
     <div class="data-card">
       <div class="data-card-header">📬 Accounts to Update Address</div>
       ${accounts.map((a, idx) => {
+        if (isRowDeleted('address', idx)) return '';
         const key = 'addr_' + idx;
         const checked = isItemChecked(key);
         return `<div class="checklist-item ${checked ? 'row-done' : ''}">
           <input type="checkbox" class="task-checkbox" ${checked ? 'checked' : ''} onchange="toggleCheckedItem('${key}', this)">
           <span class="editable-text" onclick="editCell(this,'${key}_text')">${getEdited(key+'_text', a)}</span>
+          <button class="row-delete-btn" onclick="deleteOriginalRow('address',${idx})" title="Delete">×</button>
         </div>`;
       }).join('')}
       ${getExtraRows('address').map((row, idx) => {
@@ -2474,6 +2527,7 @@ function renderAddressUpdate() {
         return `<div class="checklist-item ${checked ? 'row-done' : ''}">
           <input type="checkbox" class="task-checkbox" ${checked ? 'checked' : ''} onchange="toggleCheckedItem('${key}', this)">
           <span class="editable-text" onclick="editCell(this,'${key}_text')">${getEdited(key+'_text', row)}</span>
+          <button class="row-delete-btn" onclick="deleteRowFromTab('address',${idx})" title="Delete">×</button>
         </div>`;
       }).join('')}
       <button class="add-task-btn" onclick="addRowToTab('address', 'New account')">+ Add account</button>
