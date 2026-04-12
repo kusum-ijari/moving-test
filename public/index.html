@@ -1842,16 +1842,58 @@ function filterPerson(person) {
   renderCategories();
 }
 
+function countTabItems(tabName, hardcodedCount) {
+  const extraCount = getExtraRows(tabName).length;
+  const deletedCount = (state.deletedRows && state.deletedRows[tabName]) ? state.deletedRows[tabName].length : 0;
+  const total = hardcodedCount - deletedCount + extraCount;
+  let done = 0;
+  for (let i = 0; i < hardcodedCount; i++) {
+    if (!isRowDeleted(tabName, i) && isItemChecked(tabName + '_' + i)) done++;
+  }
+  for (let i = 0; i < extraCount; i++) {
+    if (isItemChecked(tabName + '_extra_' + i)) done++;
+  }
+  return { total, done };
+}
+
 function updateProgress() {
-  const allTasks = state.categories.flatMap(c => c.tasks);
-  const preTasks = allTasks.filter(t => (t.phase || 'pre-move') === 'pre-move');
-  const total = preTasks.length;
-  const done = preTasks.filter(t => t.done).length;
+  // To Do tasks
+  const todoTasks = state.categories.flatMap(c => c.tasks);
+  let total = todoTasks.length;
+  let done = todoTasks.filter(t => t.done).length;
+
+  // Sell/Donate (49 hardcoded items)
+  const sell = countTabItems('sell', 49);
+  total += sell.total; done += sell.done;
+
+  // Buy (6 hardcoded items)
+  const buy = countTabItems('buy', 6);
+  total += buy.total; done += buy.done;
+
+  // Pack/Ship (45 hardcoded items)
+  const pack = countTabItems('pack', 45);
+  total += pack.total; done += pack.done;
+
+  // Address (14 hardcoded items)
+  const addr = countTabItems('addr', 14);
+  total += addr.total; done += addr.done;
+
+  // Custom tabs
+  if (state.customTabs) {
+    state.customTabs.forEach(tab => {
+      const items = tab.items || [];
+      total += items.length;
+      items.forEach((_, idx) => {
+        if (isItemChecked('custom_' + tab.id + '_' + idx)) done++;
+      });
+    });
+  }
+
   const pct = total > 0 ? Math.round((done / total) * 100) : 0;
 
   document.getElementById('progressFill').style.width = pct + '%';
-  document.getElementById('progressStat').innerHTML = `<strong>${pct}%</strong> pre-move`;
-  document.getElementById('progressCount').textContent = `${done} of ${total} pre-move tasks`;
+  document.getElementById('progressStat').innerHTML = `<strong>${pct}%</strong> complete`;
+  document.getElementById('progressCount').textContent = `${done} of ${total} tasks`;
 
   // Move mascot along progress bar
   const mascot = document.getElementById('mascot');
