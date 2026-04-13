@@ -1211,6 +1211,26 @@ body {
 }
 
 /* ════════════════════════════════════
+   TOTALS ROW
+   ════════════════════════════════════ */
+.data-table tfoot td {
+  padding: 12px 16px;
+  font-weight: 700;
+  font-size: 0.84rem;
+  color: var(--accent);
+  background: var(--accent-softer);
+  border-top: 2px solid var(--accent-soft);
+}
+
+.data-table tfoot td.total-label {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-secondary);
+  font-weight: 600;
+}
+
+/* ════════════════════════════════════
    DATA TABLES
    ════════════════════════════════════ */
 .data-section {
@@ -2236,6 +2256,34 @@ function toggleFilter(type, value) {
   applyFilters();
 }
 
+function updateTotals() {
+  const priceEl = document.getElementById('sellTotalPrice');
+  const qtyEl = document.getElementById('sellTotalQty');
+  if (!priceEl) return;
+
+  const section = document.getElementById('section-sell');
+  if (!section) return;
+
+  let totalPrice = 0;
+  let totalQty = 0;
+
+  section.querySelectorAll('tbody tr').forEach(row => {
+    if (row.style.display === 'none') return; // skip filtered out
+    const cells = row.querySelectorAll('td');
+    if (cells.length < 6) return;
+
+    // Price is column 3 (index 3), Qty is column 5 (index 5)
+    const priceText = cells[3]?.textContent?.trim().replace(/[^0-9.]/g, '');
+    const qtyText = cells[5]?.textContent?.trim().replace(/[^0-9]/g, '');
+
+    if (priceText) totalPrice += parseFloat(priceText) || 0;
+    if (qtyText) totalQty += parseInt(qtyText) || 0;
+  });
+
+  priceEl.textContent = totalPrice > 0 ? '$' + totalPrice.toFixed(0) : '—';
+  qtyEl.textContent = totalQty > 0 ? totalQty : '—';
+}
+
 function applyFilters() {
   const searchText = (document.getElementById('filterSearch').value || '').toLowerCase();
   const section = document.getElementById('section-' + activeSection);
@@ -2288,6 +2336,8 @@ function applyFilters() {
     if (activeFilters.status === 'undone' && isDone) show = false;
     item.style.display = show ? '' : 'none';
   });
+
+  updateTotals();
 }
 
 function renderTabs() {
@@ -2586,6 +2636,16 @@ function renderSellDonate() {
           <td><button class="row-delete-btn" onclick="deleteRowFromTab('sell',${idx})" title="Delete">×</button></td>
         </tr>`;
         }).join('')}</tbody>
+        <tfoot><tr>
+          <td></td>
+          <td class="total-label">Totals</td>
+          <td></td>
+          <td id="sellTotalPrice">—</td>
+          <td></td>
+          <td id="sellTotalQty">—</td>
+          <td></td>
+          <td></td>
+        </tr></tfoot>
       </table>
       <button class="add-task-btn" onclick="addRowToTab('sell', {item:'New item', age:'', cost:'', action:'Sell', qty:'1', note:''})">+ Add row</button>
     </div>`;
@@ -2770,6 +2830,7 @@ document.addEventListener('DOMContentLoaded', () => {
   renderToPack();
   renderAddressUpdate();
   updateFilterChips();
+  updateTotals();
 });
 </script>
 </body>
