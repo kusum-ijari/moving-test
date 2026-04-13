@@ -2305,9 +2305,8 @@ function applyFilters() {
     return;
   }
 
-  // Filter table rows (sell, pack)
-  section.querySelectorAll('tr').forEach(row => {
-    if (row.querySelector('th')) return; // skip headers
+  // Filter table rows (sell, pack) — skip header and footer rows
+  section.querySelectorAll('tbody tr').forEach(row => {
     const text = row.textContent.toLowerCase();
     const isDone = row.querySelector('.task-checkbox')?.checked;
     let show = true;
