@@ -1144,6 +1144,73 @@ body {
 }
 
 /* ════════════════════════════════════
+   FILTER BAR
+   ════════════════════════════════════ */
+.filter-bar {
+  max-width: 720px;
+  margin: 16px auto 0;
+  padding: 0 24px;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.filter-search {
+  flex: 1;
+  min-width: 160px;
+  padding: 8px 14px 8px 34px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 0.84rem;
+  outline: none;
+  background: var(--surface) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%239CA3AF' viewBox='0 0 24 24'%3E%3Cpath d='M21 21l-4.35-4.35M11 19a8 8 0 100-16 8 8 0 000 16z' stroke='%239CA3AF' stroke-width='2' fill='none' stroke-linecap='round'/%3E%3C/svg%3E") 10px center no-repeat;
+  transition: border-color 0.2s;
+  color: var(--text);
+}
+
+.filter-search:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.08);
+}
+
+.filter-search::placeholder {
+  color: var(--text-muted);
+}
+
+.filter-chips {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+.filter-chip {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 5px 12px;
+  border: 1px solid var(--border);
+  border-radius: 100px;
+  background: var(--surface);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+}
+
+.filter-chip:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.filter-chip.active {
+  background: var(--accent);
+  color: white;
+  border-color: var(--accent);
+}
+
+/* ════════════════════════════════════
    DATA TABLES
    ════════════════════════════════════ */
 .data-section {
@@ -1492,6 +1559,12 @@ tr:hover .row-delete-btn,
 <div class="section-tabs">
   <div class="section-tab-group" id="sectionTabGroup"></div>
   <button class="tab-add-btn" onclick="promptAddTab()" title="Add a new tab">+</button>
+</div>
+
+<!-- ════ FILTER BAR ════ -->
+<div class="filter-bar" id="filterBar">
+  <input type="text" class="filter-search" id="filterSearch" placeholder="Search items..." oninput="applyFilters()">
+  <div class="filter-chips" id="filterChips"></div>
 </div>
 
 <!-- ════ TO DO SECTION ════ -->
@@ -2107,12 +2180,114 @@ const builtInTabs = [
 
 let activeSection = 'todo';
 
+let activeFilters = {};
+
 function switchSection(id) {
   activeSection = id;
   document.querySelectorAll('.section-content').forEach(s => s.classList.remove('active'));
   document.querySelectorAll('.section-tab').forEach(t => t.classList.remove('active'));
   document.getElementById('section-' + id)?.classList.add('active');
   document.querySelector(`.section-tab[data-id="${id}"]`)?.classList.add('active');
+  // Reset filters when switching tabs
+  document.getElementById('filterSearch').value = '';
+  activeFilters = {};
+  updateFilterChips();
+  applyFilters();
+}
+
+function updateFilterChips() {
+  const chips = document.getElementById('filterChips');
+  let html = '';
+
+  // Status chips (all tabs)
+  html += `<button class="filter-chip ${activeFilters.status === 'done' ? 'active' : ''}" onclick="toggleFilter('status','done')">Done</button>`;
+  html += `<button class="filter-chip ${activeFilters.status === 'undone' ? 'active' : ''}" onclick="toggleFilter('status','undone')">Not done</button>`;
+
+  // Phase chips (To Do tab only)
+  if (activeSection === 'todo') {
+    html += `<button class="filter-chip ${activeFilters.phase === 'pre-move' ? 'active' : ''}" onclick="toggleFilter('phase','pre-move')">Pre-move</button>`;
+    html += `<button class="filter-chip ${activeFilters.phase === 'post-move' ? 'active' : ''}" onclick="toggleFilter('phase','post-move')">Post-move</button>`;
+  }
+
+  // Action chips (Sell/Donate tab)
+  if (activeSection === 'sell') {
+    html += `<button class="filter-chip ${activeFilters.action === 'sell' ? 'active' : ''}" onclick="toggleFilter('action','sell')">Sell</button>`;
+    html += `<button class="filter-chip ${activeFilters.action === 'give' ? 'active' : ''}" onclick="toggleFilter('action','give')">Give</button>`;
+    html += `<button class="filter-chip ${activeFilters.action === 'donate' ? 'active' : ''}" onclick="toggleFilter('action','donate')">Donate</button>`;
+  }
+
+  // Transport chips (Pack/Ship tab)
+  if (activeSection === 'pack') {
+    html += `<button class="filter-chip ${activeFilters.transport === 'carry' ? 'active' : ''}" onclick="toggleFilter('transport','carry')">Carry-on</button>`;
+    html += `<button class="filter-chip ${activeFilters.transport === 'checked' ? 'active' : ''}" onclick="toggleFilter('transport','checked')">Checked</button>`;
+    html += `<button class="filter-chip ${activeFilters.transport === 'sea' ? 'active' : ''}" onclick="toggleFilter('transport','sea')">Sea</button>`;
+  }
+
+  chips.innerHTML = html;
+}
+
+function toggleFilter(type, value) {
+  if (activeFilters[type] === value) {
+    delete activeFilters[type];
+  } else {
+    activeFilters[type] = value;
+  }
+  updateFilterChips();
+  applyFilters();
+}
+
+function applyFilters() {
+  const searchText = (document.getElementById('filterSearch').value || '').toLowerCase();
+  const section = document.getElementById('section-' + activeSection);
+  if (!section) return;
+
+  // Filter To Do tasks
+  if (activeSection === 'todo') {
+    section.querySelectorAll('.task-row').forEach(row => {
+      const text = row.textContent.toLowerCase();
+      const isDone = row.querySelector('.task-checkbox')?.checked;
+      const phase = row.querySelector('.task-phase-badge')?.textContent.trim();
+      let show = true;
+      if (searchText && !text.includes(searchText)) show = false;
+      if (activeFilters.status === 'done' && !isDone) show = false;
+      if (activeFilters.status === 'undone' && isDone) show = false;
+      if (activeFilters.phase && phase !== activeFilters.phase) show = false;
+      row.style.display = show ? '' : 'none';
+    });
+    return;
+  }
+
+  // Filter table rows (sell, pack)
+  section.querySelectorAll('tr').forEach(row => {
+    if (row.querySelector('th')) return; // skip headers
+    const text = row.textContent.toLowerCase();
+    const isDone = row.querySelector('.task-checkbox')?.checked;
+    let show = true;
+    if (searchText && !text.includes(searchText)) show = false;
+    if (activeFilters.status === 'done' && !isDone) show = false;
+    if (activeFilters.status === 'undone' && isDone) show = false;
+    if (activeFilters.action) {
+      const actionEl = row.querySelector('.tag');
+      const action = actionEl ? actionEl.textContent.toLowerCase() : '';
+      if (!action.includes(activeFilters.action)) show = false;
+    }
+    if (activeFilters.transport) {
+      const transportText = text;
+      if (!transportText.includes(activeFilters.transport === 'carry' ? 'carry' : activeFilters.transport)) show = false;
+    }
+    row.style.display = show ? '' : 'none';
+  });
+
+  // Filter checklist items (buy, address, custom)
+  section.querySelectorAll('.checklist-item').forEach(item => {
+    const text = item.textContent.toLowerCase();
+    const isDone = item.querySelector('.task-checkbox')?.checked;
+    let show = true;
+    if (searchText && !text.includes(searchText)) show = false;
+    if (activeFilters.status === 'done' && !isDone) show = false;
+    if (activeFilters.status === 'undone' && isDone) show = false;
+    item.style.display = show ? '' : 'none';
+  });
 }
 
 function renderTabs() {
@@ -2594,6 +2769,7 @@ document.addEventListener('DOMContentLoaded', () => {
   renderToBuy();
   renderToPack();
   renderAddressUpdate();
+  updateFilterChips();
 });
 </script>
 </body>
