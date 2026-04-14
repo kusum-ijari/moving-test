@@ -1945,12 +1945,17 @@ function saveState() {
   // Debounce saves to avoid flooding the server
   clearTimeout(saveTimeout);
   saveTimeout = setTimeout(() => {
-    fetch('/api/state', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(state)
-    }).catch(e => console.error('Failed to save:', e));
+    saveStateNow();
   }, 300);
+}
+
+function saveStateNow() {
+  clearTimeout(saveTimeout);
+  return fetch('/api/state', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(state)
+  }).catch(e => console.error('Failed to save:', e));
 }
 
 function renderCategories() {
@@ -2049,14 +2054,14 @@ function addSection() {
     id, emoji: '📌', title: name, color,
     tasks: []
   });
-  saveState();
+  saveStateNow();
   renderCategories();
 }
 
 function deleteSection(catId) {
   if (!confirm('Delete this section and all its tasks?')) return;
   state.categories = state.categories.filter(c => c.id !== catId);
-  saveState();
+  saveStateNow();
   renderCategories();
 }
 
@@ -2680,7 +2685,7 @@ function deleteOriginalRow(tabName, idx) {
   if (!state.deletedRows[tabName].includes(idx)) {
     state.deletedRows[tabName].push(idx);
   }
-  saveState();
+  saveStateNow();
   reRenderTab(tabName);
 }
 
@@ -2692,7 +2697,7 @@ function addRowToTab(tabName, defaultItem) {
   if (!state.extraRows) state.extraRows = {};
   if (!state.extraRows[tabName]) state.extraRows[tabName] = [];
   state.extraRows[tabName].push(defaultItem);
-  saveState();
+  saveStateNow();
   reRenderTab(tabName);
   // Scroll the new item into view
   setTimeout(() => {
@@ -2707,7 +2712,7 @@ function addRowToTab(tabName, defaultItem) {
 function deleteRowFromTab(tabName, idx) {
   if (!state.extraRows || !state.extraRows[tabName]) return;
   state.extraRows[tabName].splice(idx, 1);
-  saveState();
+  saveStateNow();
   reRenderTab(tabName);
 }
 
@@ -2732,7 +2737,7 @@ function addCustomItem(tabId) {
   const tab = state.customTabs.find(t => t.id === tabId);
   if (!tab) return;
   tab.items.push('New item');
-  saveState();
+  saveStateNow();
   renderTabs();
   switchSection(tabId);
 }
@@ -2741,7 +2746,7 @@ function deleteCustomItem(tabId, idx) {
   const tab = state.customTabs.find(t => t.id === tabId);
   if (!tab) return;
   tab.items.splice(idx, 1);
-  saveState();
+  saveStateNow();
   renderTabs();
   switchSection(tabId);
 }
@@ -3127,14 +3132,14 @@ function addBox(person) {
   initBoxes();
   const name = 'Box ' + (state.boxes[person].length + 1);
   state.boxes[person].push({ name, items: [], collapsed: false });
-  saveState();
+  saveStateNow();
   renderBoxTracker();
 }
 
 function deleteBox(person, bIdx) {
   if (!confirm('Delete this box and all its contents?')) return;
   state.boxes[person].splice(bIdx, 1);
-  saveState();
+  saveStateNow();
   renderBoxTracker();
 }
 
@@ -3174,7 +3179,7 @@ function editBoxName(person, bIdx, el) {
 
 function addBoxItem(person, bIdx) {
   state.boxes[person][bIdx].items.push('New item');
-  saveState();
+  saveStateNow();
   renderBoxTracker();
   // Auto-focus the last item for editing
   setTimeout(() => {
@@ -3196,7 +3201,7 @@ function addBoxItem(person, bIdx) {
 
 function deleteBoxItem(person, bIdx, iIdx) {
   state.boxes[person][bIdx].items.splice(iIdx, 1);
-  saveState();
+  saveStateNow();
   renderBoxTracker();
 }
 
