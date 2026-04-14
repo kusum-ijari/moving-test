@@ -1144,6 +1144,204 @@ body {
 }
 
 /* ════════════════════════════════════
+   BOX TRACKER
+   ════════════════════════════════════ */
+.box-tracker {
+  max-width: 720px;
+  margin: 0 auto 24px;
+  padding: 0 24px;
+}
+
+.box-tracker h3 {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.box-columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+@media (max-width: 600px) {
+  .box-columns { grid-template-columns: 1fr; }
+}
+
+.box-column-header {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.box-column-header .person-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.box-column-header .add-box-btn {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 4px 12px;
+  border: 1px dashed var(--border);
+  border-radius: 6px;
+  background: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.box-column-header .add-box-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: var(--accent-softer);
+}
+
+.box-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  margin-bottom: 10px;
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+}
+
+.box-card-header {
+  padding: 10px 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--bg);
+  border-bottom: 1px solid var(--border-light);
+  cursor: pointer;
+}
+
+.box-card-header:hover {
+  background: var(--accent-softer);
+}
+
+.box-card-header .box-icon {
+  font-size: 1.1rem;
+}
+
+.box-card-header .box-name {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text);
+  flex: 1;
+}
+
+.box-card-header .box-count {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.box-card-header .box-delete {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  opacity: 0;
+  transition: all 0.15s;
+  padding: 0 4px;
+}
+
+.box-card:hover .box-delete {
+  opacity: 0.5;
+}
+
+.box-card-header .box-delete:hover {
+  opacity: 1;
+  color: var(--high);
+}
+
+.box-contents {
+  padding: 6px 0;
+}
+
+.box-item {
+  display: flex;
+  align-items: center;
+  padding: 5px 14px;
+  gap: 8px;
+  font-size: 0.82rem;
+  color: var(--text);
+}
+
+.box-item .box-bullet {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--accent);
+  flex-shrink: 0;
+}
+
+.box-item .box-item-text {
+  flex: 1;
+  cursor: pointer;
+}
+
+.box-item .box-item-text:hover {
+  background: rgba(0,0,0,0.02);
+  border-radius: 3px;
+}
+
+.box-item .box-item-delete {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  opacity: 0;
+  padding: 0 2px;
+}
+
+.box-item:hover .box-item-delete {
+  opacity: 0.5;
+}
+
+.box-item .box-item-delete:hover {
+  opacity: 1;
+  color: var(--high);
+}
+
+.box-add-item-btn {
+  display: block;
+  width: 100%;
+  padding: 6px 14px;
+  background: none;
+  border: none;
+  border-top: 1px solid var(--border-light);
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.15s;
+}
+
+.box-add-item-btn:hover {
+  color: var(--accent);
+  background: var(--accent-softer);
+}
+
+/* ════════════════════════════════════
    FILTER BAR
    ════════════════════════════════════ */
 .filter-bar {
@@ -1590,6 +1788,9 @@ tr:hover .row-delete-btn,
 <!-- ════ TO DO SECTION ════ -->
 <div class="section-content active" id="section-todo">
   <main class="main-content" id="taskContainer"></main>
+  <!-- Box Tracker -->
+  <section class="box-tracker" id="boxTracker"></section>
+
   <section class="notes-section">
     <div class="notes-card">
       <h3>Notes & Reminders</h3>
@@ -1732,6 +1933,7 @@ async function loadStateFromServer() {
       renderToBuy();
       renderToPack();
       renderAddressUpdate();
+      renderBoxTracker();
     }
   } catch(e) {
     console.log('No saved state on server, using defaults');
@@ -2815,6 +3017,166 @@ function renderAddressUpdate() {
     </div>`;
 }
 
+// ════════════════════════════════════
+// BOX TRACKER
+// ════════════════════════════════════
+function initBoxes() {
+  if (!state.boxes) {
+    state.boxes = { supriya: [], kusum: [] };
+  }
+}
+
+function renderBoxTracker() {
+  initBoxes();
+  const container = document.getElementById('boxTracker');
+  if (!container) return;
+
+  function renderColumn(person, label) {
+    const boxes = state.boxes[person] || [];
+    return `
+      <div>
+        <div class="box-column-header">
+          <span class="person-label">📋 ${label}</span>
+          <button class="add-box-btn" onclick="addBox('${person}')">+ Add box</button>
+        </div>
+        ${boxes.map((box, bIdx) => `
+          <div class="box-card">
+            <div class="box-card-header" onclick="toggleBoxCollapse('${person}', ${bIdx})">
+              <span class="box-icon">📦</span>
+              <span class="box-name" onclick="event.stopPropagation(); editBoxName('${person}', ${bIdx}, this)">${box.name}</span>
+              <span class="box-count">${box.items.length} items</span>
+              <button class="box-delete" onclick="event.stopPropagation(); deleteBox('${person}', ${bIdx})" title="Delete box">×</button>
+            </div>
+            <div class="box-contents" style="${box.collapsed ? 'display:none' : ''}">
+              ${box.items.map((item, iIdx) => `
+                <div class="box-item">
+                  <span class="box-bullet"></span>
+                  <span class="box-item-text" onclick="editBoxItem('${person}', ${bIdx}, ${iIdx}, this)">${item}</span>
+                  <button class="box-item-delete" onclick="deleteBoxItem('${person}', ${bIdx}, ${iIdx})" title="Remove">×</button>
+                </div>
+              `).join('')}
+              <button class="box-add-item-btn" onclick="addBoxItem('${person}', ${bIdx})">+ Add item</button>
+            </div>
+          </div>
+        `).join('')}
+        ${boxes.length === 0 ? '<div style="font-size:0.82rem;color:var(--text-muted);padding:12px 0;text-align:center">No boxes yet</div>' : ''}
+      </div>
+    `;
+  }
+
+  container.innerHTML = `
+    <h3>📦 Box Contents Tracker</h3>
+    <div class="box-columns">
+      ${renderColumn('supriya', 'Supriya')}
+      ${renderColumn('kusum', 'Kusum')}
+    </div>
+  `;
+}
+
+function addBox(person) {
+  initBoxes();
+  const name = 'Box ' + (state.boxes[person].length + 1);
+  state.boxes[person].push({ name, items: [], collapsed: false });
+  saveState();
+  renderBoxTracker();
+}
+
+function deleteBox(person, bIdx) {
+  if (!confirm('Delete this box and all its contents?')) return;
+  state.boxes[person].splice(bIdx, 1);
+  saveState();
+  renderBoxTracker();
+}
+
+function toggleBoxCollapse(person, bIdx) {
+  state.boxes[person][bIdx].collapsed = !state.boxes[person][bIdx].collapsed;
+  saveState();
+  renderBoxTracker();
+}
+
+function editBoxName(person, bIdx, el) {
+  const box = state.boxes[person][bIdx];
+  const input = document.createElement('input');
+  input.type = 'text';
+  input.className = 'cell-input';
+  input.value = box.name;
+  input.style.fontSize = '0.85rem';
+  input.style.fontWeight = '600';
+
+  const finish = () => {
+    const val = input.value.trim();
+    if (val) box.name = val;
+    saveState();
+    renderBoxTracker();
+  };
+
+  input.addEventListener('blur', finish);
+  input.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') input.blur();
+    if (e.key === 'Escape') { input.value = box.name; input.blur(); }
+  });
+
+  el.textContent = '';
+  el.appendChild(input);
+  input.focus();
+  input.select();
+}
+
+function addBoxItem(person, bIdx) {
+  state.boxes[person][bIdx].items.push('New item');
+  saveState();
+  renderBoxTracker();
+  // Auto-focus the last item for editing
+  setTimeout(() => {
+    const boxes = document.querySelectorAll('.box-card');
+    let count = 0;
+    for (const p of ['supriya', 'kusum']) {
+      for (let i = 0; i < (state.boxes[p]?.length || 0); i++) {
+        if (p === person && i === bIdx) {
+          const items = boxes[count]?.querySelectorAll('.box-item-text');
+          const last = items?.[items.length - 1];
+          if (last) editBoxItem(person, bIdx, state.boxes[person][bIdx].items.length - 1, last);
+          return;
+        }
+        count++;
+      }
+    }
+  }, 50);
+}
+
+function deleteBoxItem(person, bIdx, iIdx) {
+  state.boxes[person][bIdx].items.splice(iIdx, 1);
+  saveState();
+  renderBoxTracker();
+}
+
+function editBoxItem(person, bIdx, iIdx, el) {
+  const items = state.boxes[person][bIdx].items;
+  const input = document.createElement('input');
+  input.type = 'text';
+  input.className = 'cell-input';
+  input.value = items[iIdx];
+  input.style.fontSize = '0.82rem';
+
+  const finish = () => {
+    const val = input.value.trim();
+    if (val) items[iIdx] = val;
+    saveState();
+    renderBoxTracker();
+  };
+
+  input.addEventListener('blur', finish);
+  input.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') input.blur();
+    if (e.key === 'Escape') { input.value = items[iIdx]; input.blur(); }
+  });
+
+  el.textContent = '';
+  el.appendChild(input);
+  input.focus();
+  input.select();
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   renderCategories();
   updateCountdown();
@@ -2830,6 +3192,7 @@ document.addEventListener('DOMContentLoaded', () => {
   renderAddressUpdate();
   updateFilterChips();
   updateTotals();
+  renderBoxTracker();
 });
 </script>
 </body>
