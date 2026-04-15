@@ -2813,6 +2813,7 @@ function toggleCheckedItem(key, checkbox) {
   const row = checkbox.closest('tr') || checkbox.closest('.checklist-item');
   if (row) row.classList.toggle('row-done', checkbox.checked);
   saveState();
+  updateProgress();
 }
 
 function isItemChecked(key) {
