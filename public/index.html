@@ -2732,8 +2732,65 @@ function addRowToTab(tabName, defaultItem) {
 function deleteRowFromTab(tabName, idx) {
   if (!state.extraRows || !state.extraRows[tabName]) return;
   state.extraRows[tabName].splice(idx, 1);
+  // Shift any checked/edited state keyed to higher indices down by 1
+  shiftExtraRowKeys(tabName, idx);
   saveStateNow();
   reRenderTab(tabName);
+}
+
+function shiftExtraRowKeys(tabName, deletedIdx) {
+  const prefix = tabName + '_extra_';
+  const newChecked = {};
+  const newEdited = {};
+
+  // Rebuild checkedItems
+  if (state.checkedItems) {
+    for (const key in state.checkedItems) {
+      if (key.startsWith(prefix)) {
+        const rest = key.slice(prefix.length);
+        const match = rest.match(/^(\d+)(.*)$/);
+        if (match) {
+          const oldIdx = parseInt(match[1]);
+          const suffix = match[2];
+          if (oldIdx < deletedIdx) {
+            newChecked[key] = state.checkedItems[key];
+          } else if (oldIdx > deletedIdx) {
+            newChecked[prefix + (oldIdx - 1) + suffix] = state.checkedItems[key];
+          }
+          // oldIdx === deletedIdx: drop it
+        } else {
+          newChecked[key] = state.checkedItems[key];
+        }
+      } else {
+        newChecked[key] = state.checkedItems[key];
+      }
+    }
+    state.checkedItems = newChecked;
+  }
+
+  // Rebuild editedItems
+  if (state.editedItems) {
+    for (const key in state.editedItems) {
+      if (key.startsWith(prefix)) {
+        const rest = key.slice(prefix.length);
+        const match = rest.match(/^(\d+)(.*)$/);
+        if (match) {
+          const oldIdx = parseInt(match[1]);
+          const suffix = match[2];
+          if (oldIdx < deletedIdx) {
+            newEdited[key] = state.editedItems[key];
+          } else if (oldIdx > deletedIdx) {
+            newEdited[prefix + (oldIdx - 1) + suffix] = state.editedItems[key];
+          }
+        } else {
+          newEdited[key] = state.editedItems[key];
+        }
+      } else {
+        newEdited[key] = state.editedItems[key];
+      }
+    }
+    state.editedItems = newEdited;
+  }
 }
 
 function reRenderTab(tabName) {
