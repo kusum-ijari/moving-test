@@ -1946,6 +1946,8 @@ async function loadStateFromServer() {
     const saved = await res.json();
     if (saved && saved.categories) {
       state = saved;
+      // Suppress milestone confetti from firing on page load for already-achieved milestones
+      suppressMilestonesOnce = true;
       renderCategories();
       initNotes();
       renderTabs();
@@ -1954,6 +1956,7 @@ async function loadStateFromServer() {
       renderToPack();
       renderAddressUpdate();
       renderBoxTracker();
+      suppressMilestonesOnce = false;
     }
   } catch(e) {
     console.log('No saved state on server, using defaults');
@@ -2322,6 +2325,45 @@ function createConfetti(element) {
   setTimeout(() => container.remove(), 1200);
 }
 
+function createPageConfetti() {
+  const colors = ['#D97706', '#EF4444', '#6B9B76', '#8B5CF6', '#F59E0B', '#EC4899', '#0EA5E9', '#7C3AED', '#10B981'];
+  const shapes = ['circle', 'square', 'circle', 'square', 'star'];
+  const viewportW = window.innerWidth;
+  const viewportH = window.innerHeight;
+
+  // Launch confetti from multiple points across the top
+  const launchPoints = 5;
+  for (let p = 0; p < launchPoints; p++) {
+    const container = document.createElement('div');
+    container.className = 'confetti-container';
+    container.style.left = ((p + 0.5) * (viewportW / launchPoints)) + 'px';
+    container.style.top = '-20px';
+    container.style.position = 'fixed';
+    document.body.appendChild(container);
+
+    // More pieces per burst
+    for (let i = 0; i < 30; i++) {
+      const piece = document.createElement('div');
+      const shape = shapes[Math.floor(Math.random() * shapes.length)];
+      piece.className = `confetti-piece ${shape}`;
+      piece.style.background = colors[Math.floor(Math.random() * colors.length)];
+      // Spray outward and downward
+      const angle = (Math.random() - 0.5) * Math.PI * 0.8 + Math.PI * 0.5; // downward-ish
+      const dist = 200 + Math.random() * (viewportH * 0.8);
+      piece.style.setProperty('--tx', Math.cos(angle) * dist * (Math.random() - 0.5) * 2 + 'px');
+      piece.style.setProperty('--ty', Math.sin(angle) * dist + 'px');
+      piece.style.setProperty('--rot', (Math.random() * 1080 - 540) + 'deg');
+      piece.style.animationDelay = (Math.random() * 0.4) + 's';
+      piece.style.animationDuration = (1.5 + Math.random() * 1.2) + 's';
+      piece.style.width = (6 + Math.random() * 10) + 'px';
+      piece.style.height = piece.style.width;
+      container.appendChild(piece);
+    }
+
+    setTimeout(() => container.remove(), 3200);
+  }
+}
+
 // ════════════════════════════════════
 // MASCOT CELEBRATION
 // ════════════════════════════════════
@@ -2357,13 +2399,20 @@ const funMessages = [
 ];
 
 const milestoneMessages = {
-  25: { emoji: '🏁', text: 'Quarter of the way there! Amazing!' },
+  10: { emoji: '🎉', text: '10% done — great start!' },
+  20: { emoji: '🌱', text: '20% complete — momentum building!' },
+  30: { emoji: '🚀', text: '30% — you\'re flying!' },
+  40: { emoji: '💪', text: '40% — crushing it!' },
   50: { emoji: '🎊', text: 'HALFWAY DONE! You\'re unstoppable!' },
-  75: { emoji: '🔥', text: 'Three quarters done — the finish line is near!' },
+  60: { emoji: '🔥', text: '60% — on fire!' },
+  70: { emoji: '⭐', text: '70% — you\'re a star!' },
+  80: { emoji: '🏆', text: '80% — almost there!' },
+  90: { emoji: '🎯', text: '90% — the finish line is in sight!' },
   100: { emoji: '🎆', text: 'ALL TASKS COMPLETE! You did it!!!' },
 };
 
 let lastMilestone = 0;
+let suppressMilestonesOnce = false;
 
 function showRandomToast() {
   const msg = funMessages[Math.floor(Math.random() * funMessages.length)];
@@ -2371,13 +2420,31 @@ function showRandomToast() {
 }
 
 function checkMilestone(pct) {
-  [25, 50, 75, 100].forEach(m => {
+  // Fire at every 10% threshold
+  const thresholds = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
+  if (suppressMilestonesOnce) {
+    // On initial load, just sync lastMilestone to current pct without firing
+    lastMilestone = 0;
+    thresholds.forEach(m => {
+      if (pct >= m) lastMilestone = m;
+    });
+    return;
+  }
+  // If pct dropped below lastMilestone (e.g. unchecked a task), reset so we can re-trigger
+  if (pct < lastMilestone) {
+    let newLast = 0;
+    thresholds.forEach(m => { if (pct >= m) newLast = m; });
+    lastMilestone = newLast;
+    return;
+  }
+  thresholds.forEach(m => {
     if (pct >= m && lastMilestone < m) {
       lastMilestone = m;
       setTimeout(() => {
         const msg = milestoneMessages[m];
         showToast(msg.emoji, msg.text, true);
-      }, 500);
+        createPageConfetti();
+      }, 300);
     }
   });
 }
