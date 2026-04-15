@@ -2611,21 +2611,30 @@ function updateTotals() {
   let totalPrice = 0;
   let totalQty = 0;
 
+  // Extract first signed number from a string (preserves minus sign)
+  const parseSignedNumber = (text) => {
+    if (!text) return 0;
+    const match = text.match(/-?\d+\.?\d*/);
+    return match ? parseFloat(match[0]) : 0;
+  };
+
   section.querySelectorAll('tbody tr').forEach(row => {
     if (row.style.display === 'none') return; // skip filtered out
     const cells = row.querySelectorAll('td');
     if (cells.length < 6) return;
 
     // Price is column 3 (index 3), Qty is column 5 (index 5)
-    const priceText = cells[3]?.textContent?.trim().replace(/[^0-9.]/g, '');
-    const qtyText = cells[5]?.textContent?.trim().replace(/[^0-9]/g, '');
-
-    if (priceText) totalPrice += parseFloat(priceText) || 0;
-    if (qtyText) totalQty += parseInt(qtyText) || 0;
+    totalPrice += parseSignedNumber(cells[3]?.textContent?.trim());
+    totalQty += parseSignedNumber(cells[5]?.textContent?.trim());
   });
 
-  priceEl.textContent = totalPrice > 0 ? '$' + totalPrice.toFixed(0) : '—';
-  qtyEl.textContent = totalQty > 0 ? totalQty : '—';
+  // Format with proper sign handling
+  const fmtPrice = (v) => {
+    if (v === 0) return '—';
+    return (v < 0 ? '-$' : '$') + Math.abs(v).toFixed(0);
+  };
+  priceEl.textContent = fmtPrice(totalPrice);
+  qtyEl.textContent = totalQty === 0 ? '—' : totalQty;
 }
 
 function applyFilters() {
