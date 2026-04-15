@@ -1442,13 +1442,33 @@ body {
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-sm);
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
+  overflow: hidden;
   margin-bottom: 16px;
 }
 
+.table-scroll-wrap {
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-x pan-y;
+}
+
 .data-table {
-  min-width: 600px;
+  min-width: 640px;
+}
+
+/* Visual scroll hint on mobile */
+@media (max-width: 600px) {
+  .table-scroll-wrap {
+    background:
+      linear-gradient(to right, var(--surface) 30%, rgba(255,255,255,0)),
+      linear-gradient(to right, rgba(0,0,0,0.05), var(--surface) 70%) 100% 0,
+      radial-gradient(farthest-side at 0 50%, rgba(0,0,0,0.08), rgba(0,0,0,0)),
+      radial-gradient(farthest-side at 100% 50%, rgba(0,0,0,0.08), rgba(0,0,0,0)) 100% 0;
+    background-repeat: no-repeat;
+    background-size: 40px 100%, 40px 100%, 14px 100%, 14px 100%;
+    background-attachment: local, local, scroll, scroll;
+  }
 }
 
 .data-card-header {
@@ -2862,6 +2882,7 @@ function renderSellDonate() {
   document.getElementById('sellContainer').innerHTML = `
     <div class="data-card">
       <div class="data-card-header">🏷️ Items to Sell / Donate / Give Away</div>
+      <div class="table-scroll-wrap">
       <table class="data-table">
         <thead><tr><th style="width:30px"></th><th>Item</th><th>Age</th><th>Price</th><th>Action</th><th>Qty</th><th>Note</th><th style="width:30px"></th></tr></thead>
         <tbody>${items.map((i, idx) => {
@@ -2903,6 +2924,7 @@ function renderSellDonate() {
           <td></td>
         </tr></tfoot>
       </table>
+      </div>
       <button class="add-task-btn" onclick="addRowToTab('sell', {item:'New item', age:'', cost:'', action:'Sell', qty:'1', note:''})">+ Add row</button>
     </div>`;
 }
@@ -2997,6 +3019,7 @@ function renderToPack() {
   for (const [cat, items] of Object.entries(categories)) {
     html += `<div class="data-card" style="margin-bottom:16px">
       <div class="data-card-header">📦 ${cat}</div>
+      <div class="table-scroll-wrap">
       <table class="data-table">
         <thead><tr><th style="width:30px"></th><th>Item</th><th>Transport</th><th>Notes</th><th style="width:30px"></th></tr></thead>
         <tbody>${items.map(i => {
@@ -3013,6 +3036,7 @@ function renderToPack() {
         </tr>`;
         }).join('')}</tbody>
       </table>
+      </div>
     </div>`;
   }
   // Extra pack rows (generic, not category-specific)
@@ -3020,6 +3044,7 @@ function renderToPack() {
   if (extraPack.length > 0) {
     html += `<div class="data-card" style="margin-bottom:16px">
       <div class="data-card-header">📦 Additional Items</div>
+      <div class="table-scroll-wrap">
       <table class="data-table">
         <thead><tr><th style="width:30px"></th><th>Item</th><th>Transport</th><th>Notes</th><th style="width:30px"></th></tr></thead>
         <tbody>${extraPack.map((row, idx) => {
@@ -3034,6 +3059,7 @@ function renderToPack() {
         </tr>`;
         }).join('')}</tbody>
       </table>
+      </div>
     </div>`;
   }
   html += `<button class="add-task-btn" style="max-width:720px;margin:0 auto 16px;display:flex" onclick="addRowToTab('pack', {item:'New item', transport:'Checked', notes:''})">+ Add item</button>`;
