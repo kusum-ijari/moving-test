@@ -2798,12 +2798,9 @@ function reRenderTab(tabName) {
   else if (tabName === 'buy') renderToBuy();
   else if (tabName === 'pack') renderToPack();
   else if (tabName === 'address') renderAddressUpdate();
-  // Ensure active section stays visible
-  switchSection(activeSection);
-  if (tabName === 'sell') renderSellDonate();
-  else if (tabName === 'buy') renderToBuy();
-  else if (tabName === 'pack') renderToPack();
-  else if (tabName === 'address') renderAddressUpdate();
+  // Re-apply filters after re-render (but don't reset them)
+  if (typeof applyFilters === 'function') applyFilters();
+  updateTotals();
 }
 
 function getExtraRows(tabName) {
