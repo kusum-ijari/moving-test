@@ -2699,12 +2699,20 @@ function deleteTab(tabId) {
   switchSection(activeSection);
 }
 
+function pushToUndoHistory(event) {
+  if (!state.deletionHistory) state.deletionHistory = [];
+  state.deletionHistory.push(event);
+  // Limit to last 50 deletions
+  if (state.deletionHistory.length > 50) state.deletionHistory.shift();
+}
+
 function deleteOriginalRow(tabName, idx) {
   if (!state.deletedRows) state.deletedRows = {};
   if (!state.deletedRows[tabName]) state.deletedRows[tabName] = [];
   if (!state.deletedRows[tabName].includes(idx)) {
     state.deletedRows[tabName].push(idx);
   }
+  pushToUndoHistory({ type: 'original', tabName, idx });
   saveStateNow();
   reRenderTab(tabName);
 }
@@ -2731,11 +2739,136 @@ function addRowToTab(tabName, defaultItem) {
 
 function deleteRowFromTab(tabName, idx) {
   if (!state.extraRows || !state.extraRows[tabName]) return;
+  const deletedData = state.extraRows[tabName][idx];
+  // Capture any edited/checked state for this row so we can restore
+  const prefix = tabName + '_extra_' + idx;
+  const savedChecked = {};
+  const savedEdited = {};
+  if (state.checkedItems) {
+    for (const key in state.checkedItems) {
+      if (key.startsWith(prefix)) savedChecked[key.slice((tabName + '_extra_').length)] = state.checkedItems[key];
+    }
+  }
+  if (state.editedItems) {
+    for (const key in state.editedItems) {
+      if (key.startsWith(prefix)) savedEdited[key.slice((tabName + '_extra_').length)] = state.editedItems[key];
+    }
+  }
+  pushToUndoHistory({ type: 'extra', tabName, idx, data: deletedData, savedChecked, savedEdited });
   state.extraRows[tabName].splice(idx, 1);
   // Shift any checked/edited state keyed to higher indices down by 1
   shiftExtraRowKeys(tabName, idx);
   saveStateNow();
   reRenderTab(tabName);
+}
+
+function undoLastDelete(tabName) {
+  if (!state.deletionHistory || state.deletionHistory.length === 0) return;
+  // Find the last deletion for this tab
+  let lastIdx = -1;
+  for (let i = state.deletionHistory.length - 1; i >= 0; i--) {
+    if (state.deletionHistory[i].tabName === tabName) {
+      lastIdx = i;
+      break;
+    }
+  }
+  if (lastIdx === -1) return;
+
+  const event = state.deletionHistory.splice(lastIdx, 1)[0];
+
+  if (event.type === 'original') {
+    // Remove from deletedRows
+    if (state.deletedRows && state.deletedRows[tabName]) {
+      state.deletedRows[tabName] = state.deletedRows[tabName].filter(i => i !== event.idx);
+    }
+  } else if (event.type === 'extra') {
+    // Shift existing extra rows' state UP at the insertion point first
+    unshiftExtraRowKeys(tabName, event.idx);
+    // Insert the deleted data back
+    if (!state.extraRows) state.extraRows = {};
+    if (!state.extraRows[tabName]) state.extraRows[tabName] = [];
+    state.extraRows[tabName].splice(event.idx, 0, event.data);
+    // Restore saved checked/edited state
+    if (event.savedChecked) {
+      if (!state.checkedItems) state.checkedItems = {};
+      for (const suffix in event.savedChecked) {
+        state.checkedItems[tabName + '_extra_' + event.idx + suffix.slice(String(0).length)] = event.savedChecked[suffix];
+      }
+    }
+    if (event.savedEdited) {
+      if (!state.editedItems) state.editedItems = {};
+      for (const suffix in event.savedEdited) {
+        state.editedItems[tabName + '_extra_' + event.idx + suffix.slice(String(0).length)] = event.savedEdited[suffix];
+      }
+    }
+  }
+
+  saveStateNow();
+  reRenderTab(tabName);
+}
+
+function unshiftExtraRowKeys(tabName, insertIdx) {
+  // Shift all extra row keys at or above insertIdx UP by 1 to make room
+  const prefix = tabName + '_extra_';
+  const newChecked = {};
+  const newEdited = {};
+
+  if (state.checkedItems) {
+    for (const key in state.checkedItems) {
+      if (key.startsWith(prefix)) {
+        const rest = key.slice(prefix.length);
+        const match = rest.match(/^(\d+)(.*)$/);
+        if (match) {
+          const oldIdx = parseInt(match[1]);
+          const suffix = match[2];
+          if (oldIdx < insertIdx) {
+            newChecked[key] = state.checkedItems[key];
+          } else {
+            newChecked[prefix + (oldIdx + 1) + suffix] = state.checkedItems[key];
+          }
+        } else {
+          newChecked[key] = state.checkedItems[key];
+        }
+      } else {
+        newChecked[key] = state.checkedItems[key];
+      }
+    }
+    state.checkedItems = newChecked;
+  }
+
+  if (state.editedItems) {
+    for (const key in state.editedItems) {
+      if (key.startsWith(prefix)) {
+        const rest = key.slice(prefix.length);
+        const match = rest.match(/^(\d+)(.*)$/);
+        if (match) {
+          const oldIdx = parseInt(match[1]);
+          const suffix = match[2];
+          if (oldIdx < insertIdx) {
+            newEdited[key] = state.editedItems[key];
+          } else {
+            newEdited[prefix + (oldIdx + 1) + suffix] = state.editedItems[key];
+          }
+        } else {
+          newEdited[key] = state.editedItems[key];
+        }
+      } else {
+        newEdited[key] = state.editedItems[key];
+      }
+    }
+    state.editedItems = newEdited;
+  }
+}
+
+function hasUndoForTab(tabName) {
+  if (!state.deletionHistory) return false;
+  return state.deletionHistory.some(e => e.tabName === tabName);
+}
+
+function renderUndoButton(tabName) {
+  return hasUndoForTab(tabName)
+    ? `<button class="add-task-btn" style="margin-left:8px;color:var(--accent)" onclick="undoLastDelete('${tabName}')">↶ Undo last delete</button>`
+    : '';
 }
 
 function shiftExtraRowKeys(tabName, deletedIdx) {
@@ -2980,7 +3113,10 @@ function renderSellDonate() {
         </tr></tfoot>
       </table>
       </div>
-      <button class="add-task-btn" onclick="addRowToTab('sell', {item:'New item', age:'', cost:'', action:'Sell', qty:'1', note:''})">+ Add row</button>
+      <div style="display:flex;align-items:center;flex-wrap:wrap">
+        <button class="add-task-btn" onclick="addRowToTab('sell', {item:'New item', age:'', cost:'', action:'Sell', qty:'1', note:''})">+ Add row</button>
+        ${renderUndoButton('sell')}
+      </div>
     </div>`;
 }
 
@@ -3008,7 +3144,10 @@ function renderToBuy() {
           <button class="row-delete-btn" onclick="deleteRowFromTab('buy',${idx})" title="Delete">×</button>
         </div>`;
       }).join('')}
-      <button class="add-task-btn" onclick="addRowToTab('buy', 'New item')">+ Add item</button>
+      <div style="display:flex;align-items:center;flex-wrap:wrap">
+        <button class="add-task-btn" onclick="addRowToTab('buy', 'New item')">+ Add item</button>
+        ${renderUndoButton('buy')}
+      </div>
     </div>`;
 }
 
@@ -3117,7 +3256,10 @@ function renderToPack() {
       </div>
     </div>`;
   }
-  html += `<button class="add-task-btn" style="max-width:720px;margin:0 auto 16px;display:flex" onclick="addRowToTab('pack', {item:'New item', transport:'Checked', notes:''})">+ Add item</button>`;
+  html += `<div style="max-width:720px;margin:0 auto 16px;display:flex;align-items:center;flex-wrap:wrap">
+    <button class="add-task-btn" onclick="addRowToTab('pack', {item:'New item', transport:'Checked', notes:''})">+ Add item</button>
+    ${renderUndoButton('pack')}
+  </div>`;
   document.getElementById('packContainer').innerHTML = html;
 }
 
@@ -3149,7 +3291,10 @@ function renderAddressUpdate() {
           <button class="row-delete-btn" onclick="deleteRowFromTab('address',${idx})" title="Delete">×</button>
         </div>`;
       }).join('')}
-      <button class="add-task-btn" onclick="addRowToTab('address', 'New account')">+ Add account</button>
+      <div style="display:flex;align-items:center;flex-wrap:wrap">
+        <button class="add-task-btn" onclick="addRowToTab('address', 'New account')">+ Add account</button>
+        ${renderUndoButton('address')}
+      </div>
     </div>`;
 }
 
