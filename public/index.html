@@ -2611,11 +2611,15 @@ function updateTotals() {
   let totalPrice = 0;
   let totalQty = 0;
 
-  // Extract first signed number from a string (preserves minus sign)
+  // Extract signed number from text like "-$30", "$-30", "-30", "30"
   const parseSignedNumber = (text) => {
-    if (!text) return 0;
-    const match = text.match(/-?\d+\.?\d*/);
-    return match ? parseFloat(match[0]) : 0;
+    if (!text || text === '—') return 0;
+    // Check if negative (minus anywhere before the digits)
+    const isNegative = text.includes('-');
+    // Strip everything except digits and dots
+    const stripped = text.replace(/[^0-9.]/g, '');
+    const num = parseFloat(stripped) || 0;
+    return isNegative ? -num : num;
   };
 
   section.querySelectorAll('tbody tr').forEach(row => {
