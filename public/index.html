@@ -1986,26 +1986,7 @@ function saveStateNow() {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(state)
-  }).then(() => {
-    // Auto-sync to Google Sheets (debounced heavily - 10s)
-    scheduleAutoSync();
   }).catch(e => console.error('Failed to save:', e));
-}
-
-let autoSyncTimeout = null;
-function scheduleAutoSync() {
-  clearTimeout(autoSyncTimeout);
-  autoSyncTimeout = setTimeout(() => {
-    // Silent background sync - don't update UI
-    const sheets = typeof buildSheetData === 'function' ? buildSheetData() : null;
-    if (sheets) {
-      fetch('/api/sync-sheets', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(sheets)
-      }).catch(() => {}); // Silent fail if not configured
-    }
-  }, 10000); // Wait 10s of inactivity before syncing
 }
 
 function renderCategories() {
