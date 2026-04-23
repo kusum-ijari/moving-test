@@ -1845,6 +1845,12 @@ tr:hover .row-delete-btn,
 <!-- ════ TOAST ════ -->
 <div class="toast-container" id="toastContainer"></div>
 
+<!-- ════ EXPORT / SYNC BAR ════ -->
+<div style="max-width:720px;margin:0 auto 24px;padding:0 24px;display:flex;gap:8px;flex-wrap:wrap;justify-content:center">
+  <button onclick="exportToExcel()" style="font-family:'Plus Jakarta Sans',sans-serif;font-size:0.82rem;font-weight:600;padding:10px 20px;border:1px solid var(--border);border-radius:8px;background:var(--surface);color:var(--text);cursor:pointer;display:flex;align-items:center;gap:6px;transition:all 0.15s" onmouseover="this.style.borderColor='var(--accent)';this.style.color='var(--accent)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text)'">📥 Export to Excel</button>
+  <button onclick="syncToGoogleSheets()" id="syncBtn" style="font-family:'Plus Jakarta Sans',sans-serif;font-size:0.82rem;font-weight:600;padding:10px 20px;border:1px solid var(--border);border-radius:8px;background:var(--surface);color:var(--text);cursor:pointer;display:flex;align-items:center;gap:6px;transition:all 0.15s" onmouseover="this.style.borderColor='var(--accent)';this.style.color='var(--accent)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text)'">🔄 Sync to Google Sheets</button>
+</div>
+
 <!-- ════ FOOTER ════ -->
 <footer class="footer">
   <div class="footer-route">
@@ -1857,6 +1863,8 @@ tr:hover .row-delete-btn,
   <p>The Great Move of 2026</p>
 </footer>
 
+<!-- SheetJS for Excel export -->
+<script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
 <script>
 const MOVE_DATE = new Date('2026-07-15T10:00:00');
 
@@ -1978,7 +1986,26 @@ function saveStateNow() {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(state)
+  }).then(() => {
+    // Auto-sync to Google Sheets (debounced heavily - 10s)
+    scheduleAutoSync();
   }).catch(e => console.error('Failed to save:', e));
+}
+
+let autoSyncTimeout = null;
+function scheduleAutoSync() {
+  clearTimeout(autoSyncTimeout);
+  autoSyncTimeout = setTimeout(() => {
+    // Silent background sync - don't update UI
+    const sheets = typeof buildSheetData === 'function' ? buildSheetData() : null;
+    if (sheets) {
+      fetch('/api/sync-sheets', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(sheets)
+      }).catch(() => {}); // Silent fail if not configured
+    }
+  }, 10000); // Wait 10s of inactivity before syncing
 }
 
 function renderCategories() {
@@ -3536,6 +3563,152 @@ function editBoxItem(person, bIdx, iIdx, el) {
   el.appendChild(input);
   input.focus();
   input.select();
+}
+
+// ════════════════════════════════════
+// EXPORT TO EXCEL
+// ════════════════════════════════════
+function buildSheetData() {
+  const sheets = {};
+
+  // To Do sheet
+  const todoRows = [['Section', 'Task', 'Done', 'Phase', 'Comment']];
+  state.categories.forEach(cat => {
+    cat.tasks.forEach(task => {
+      todoRows.push([cat.title, task.text, task.done ? 'Yes' : 'No', task.phase || 'pre-move', task.comment || '']);
+    });
+  });
+  sheets['To Do'] = todoRows;
+
+  // Sell/Donate sheet - collect from rendered state
+  const sellRows = [['Item', 'Age', 'Price', 'Action', 'Qty', 'Note', 'Done']];
+  const sellContainer = document.getElementById('sellContainer');
+  if (sellContainer) {
+    sellContainer.querySelectorAll('tbody tr').forEach(row => {
+      const cells = row.querySelectorAll('td');
+      if (cells.length < 7) return;
+      sellRows.push([
+        cells[1]?.textContent?.trim() || '',
+        cells[2]?.textContent?.trim() || '',
+        cells[3]?.textContent?.trim() || '',
+        cells[4]?.textContent?.trim() || '',
+        cells[5]?.textContent?.trim() || '',
+        cells[6]?.textContent?.trim() || '',
+        row.classList.contains('row-done') ? 'Yes' : 'No'
+      ]);
+    });
+  }
+  sheets['To Sell-Donate'] = sellRows;
+
+  // Buy sheet
+  const buyRows = [['Item', 'Done']];
+  const buyContainer = document.getElementById('buyContainer');
+  if (buyContainer) {
+    buyContainer.querySelectorAll('.checklist-item').forEach(item => {
+      const text = item.querySelector('.editable-text')?.textContent?.trim() || '';
+      buyRows.push([text, item.classList.contains('row-done') ? 'Yes' : 'No']);
+    });
+  }
+  sheets['To Buy'] = buyRows;
+
+  // Pack/Ship sheet
+  const packRows = [['Category', 'Item', 'Transport', 'Notes', 'Done']];
+  const packContainer = document.getElementById('packContainer');
+  if (packContainer) {
+    let currentCat = '';
+    packContainer.querySelectorAll('.data-card').forEach(card => {
+      const header = card.querySelector('.data-card-header')?.textContent?.trim().replace(/^📦\s*/, '') || '';
+      card.querySelectorAll('tbody tr').forEach(row => {
+        const cells = row.querySelectorAll('td');
+        if (cells.length < 4) return;
+        packRows.push([
+          header,
+          cells[1]?.textContent?.trim() || '',
+          cells[2]?.textContent?.trim() || '',
+          cells[3]?.textContent?.trim() || '',
+          row.classList.contains('row-done') ? 'Yes' : 'No'
+        ]);
+      });
+    });
+  }
+  sheets['To Pack-Ship'] = packRows;
+
+  // Address Update sheet
+  const addrRows = [['Account', 'Done']];
+  const addrContainer = document.getElementById('addressContainer');
+  if (addrContainer) {
+    addrContainer.querySelectorAll('.checklist-item').forEach(item => {
+      const text = item.querySelector('.editable-text')?.textContent?.trim() || '';
+      addrRows.push([text, item.classList.contains('row-done') ? 'Yes' : 'No']);
+    });
+  }
+  sheets['Address Update'] = addrRows;
+
+  // Box Contents sheet
+  if (state.boxes) {
+    const boxRows = [['Person', 'Box', 'Item']];
+    ['supriya', 'kusum'].forEach(person => {
+      (state.boxes[person] || []).forEach(box => {
+        box.items.forEach(item => {
+          boxRows.push([person.charAt(0).toUpperCase() + person.slice(1), box.name, item]);
+        });
+        if (box.items.length === 0) {
+          boxRows.push([person.charAt(0).toUpperCase() + person.slice(1), box.name, '(empty)']);
+        }
+      });
+    });
+    sheets['Box Contents'] = boxRows;
+  }
+
+  return sheets;
+}
+
+function exportToExcel() {
+  const sheets = buildSheetData();
+  const wb = XLSX.utils.book_new();
+  for (const [name, data] of Object.entries(sheets)) {
+    const ws = XLSX.utils.aoa_to_sheet(data);
+    // Auto-size columns
+    const colWidths = data[0].map((_, colIdx) => {
+      let maxLen = 10;
+      data.forEach(row => {
+        const cellLen = String(row[colIdx] || '').length;
+        if (cellLen > maxLen) maxLen = cellLen;
+      });
+      return { wch: Math.min(maxLen + 2, 50) };
+    });
+    ws['!cols'] = colWidths;
+    XLSX.utils.book_append_sheet(wb, ws, name);
+  }
+  XLSX.writeFile(wb, 'MovingPlanning_Export.xlsx');
+}
+
+// ════════════════════════════════════
+// SYNC TO GOOGLE SHEETS
+// ════════════════════════════════════
+async function syncToGoogleSheets() {
+  const btn = document.getElementById('syncBtn');
+  btn.textContent = '⏳ Syncing...';
+  btn.disabled = true;
+  try {
+    const sheets = buildSheetData();
+    const res = await fetch('/api/sync-sheets', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(sheets)
+    });
+    const result = await res.json();
+    if (result.ok) {
+      btn.innerHTML = '✅ Synced!';
+      setTimeout(() => { btn.innerHTML = '🔄 Sync to Google Sheets'; btn.disabled = false; }, 2000);
+    } else {
+      btn.innerHTML = '❌ ' + (result.error || 'Sync failed');
+      setTimeout(() => { btn.innerHTML = '🔄 Sync to Google Sheets'; btn.disabled = false; }, 3000);
+    }
+  } catch(e) {
+    btn.innerHTML = '❌ Not configured';
+    setTimeout(() => { btn.innerHTML = '🔄 Sync to Google Sheets'; btn.disabled = false; }, 3000);
+  }
 }
 
 document.addEventListener('DOMContentLoaded', () => {
