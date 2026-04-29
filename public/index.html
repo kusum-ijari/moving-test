@@ -1250,6 +1250,28 @@ body {
   color: var(--text-muted);
 }
 
+.box-card-header .box-weight {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--accent);
+  background: var(--accent-soft);
+  padding: 2px 8px;
+  border-radius: 100px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.box-card-header .box-weight:hover {
+  background: var(--accent);
+  color: white;
+}
+
+.box-card-header .box-weight.empty {
+  background: var(--border-light);
+  color: var(--text-muted);
+  font-style: italic;
+}
+
 .box-card-header .box-delete {
   background: none;
   border: none;
@@ -3414,6 +3436,7 @@ function renderBoxTracker() {
               <span class="box-icon">📦</span>
               <span class="box-name" onclick="event.stopPropagation(); editBoxName('${person}', ${bIdx}, this)">${box.name}</span>
               <span class="box-count">${box.items.length} items</span>
+              <span class="box-weight ${box.weight ? '' : 'empty'}" onclick="event.stopPropagation(); editBoxWeight('${person}', ${bIdx}, this)" title="Click to edit weight">${box.weight ? '⚖️ ' + box.weight : '⚖️ —'}</span>
               <button class="box-delete" onclick="event.stopPropagation(); deleteBox('${person}', ${bIdx})" title="Delete box">×</button>
             </div>
             <div class="box-contents" style="${box.collapsed ? 'display:none' : ''}">
@@ -3483,6 +3506,38 @@ function editBoxName(person, bIdx, el) {
   input.addEventListener('keydown', (e) => {
     if (e.key === 'Enter') input.blur();
     if (e.key === 'Escape') { input.value = box.name; input.blur(); }
+  });
+
+  el.textContent = '';
+  el.appendChild(input);
+  input.focus();
+  input.select();
+}
+
+function editBoxWeight(person, bIdx, el) {
+  const box = state.boxes[person][bIdx];
+  const input = document.createElement('input');
+  input.type = 'text';
+  input.className = 'cell-input';
+  input.value = box.weight || '';
+  input.placeholder = 'e.g. 12 lb';
+  input.style.fontSize = '0.7rem';
+  input.style.width = '90px';
+  input.style.padding = '2px 6px';
+
+  const finish = () => {
+    const val = input.value.trim();
+    box.weight = val || '';
+    saveStateNow();
+    renderBoxTracker();
+  };
+
+  input.addEventListener('blur', finish);
+  input.addEventListener('click', (e) => e.stopPropagation());
+  input.addEventListener('keydown', (e) => {
+    e.stopPropagation();
+    if (e.key === 'Enter') input.blur();
+    if (e.key === 'Escape') { input.value = box.weight || ''; input.blur(); }
   });
 
   el.textContent = '';
@@ -3627,14 +3682,16 @@ function buildSheetData() {
 
   // Box Contents sheet
   if (state.boxes) {
-    const boxRows = [['Person', 'Box', 'Item']];
+    const boxRows = [['Person', 'Box', 'Weight', 'Item']];
     ['supriya', 'kusum'].forEach(person => {
       (state.boxes[person] || []).forEach(box => {
+        const personLabel = person.charAt(0).toUpperCase() + person.slice(1);
+        const weight = box.weight || '';
         box.items.forEach(item => {
-          boxRows.push([person.charAt(0).toUpperCase() + person.slice(1), box.name, item]);
+          boxRows.push([personLabel, box.name, weight, item]);
         });
         if (box.items.length === 0) {
-          boxRows.push([person.charAt(0).toUpperCase() + person.slice(1), box.name, '(empty)']);
+          boxRows.push([personLabel, box.name, weight, '(empty)']);
         }
       });
     });
