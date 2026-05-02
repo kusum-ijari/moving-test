@@ -3487,25 +3487,33 @@ function toggleBoxCollapse(person, bIdx) {
 }
 
 function editBoxName(person, bIdx, el) {
-  const box = state.boxes[person][bIdx];
+  const startBox = state.boxes && state.boxes[person] && state.boxes[person][bIdx];
+  if (!startBox) return;
+  const originalName = startBox.name;
   const input = document.createElement('input');
   input.type = 'text';
   input.className = 'cell-input';
-  input.value = box.name;
+  input.value = originalName;
   input.style.fontSize = '0.85rem';
   input.style.fontWeight = '600';
 
+  let finished = false;
   const finish = () => {
+    if (finished) return;
+    finished = true;
     const val = input.value.trim();
-    if (val) box.name = val;
-    saveState();
+    const box = state.boxes && state.boxes[person] && state.boxes[person][bIdx];
+    if (box && val) {
+      box.name = val;
+      saveStateNow();
+    }
     renderBoxTracker();
   };
 
   input.addEventListener('blur', finish);
   input.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter') input.blur();
-    if (e.key === 'Escape') { input.value = box.name; input.blur(); }
+    if (e.key === 'Enter') { e.preventDefault(); input.blur(); }
+    if (e.key === 'Escape') { input.value = originalName; input.blur(); }
   });
 
   el.textContent = '';
@@ -3515,20 +3523,34 @@ function editBoxName(person, bIdx, el) {
 }
 
 function editBoxWeight(person, bIdx, el) {
-  const box = state.boxes[person][bIdx];
+  // Prevent multiple inputs from being open at once
+  const existing = document.querySelector('.box-weight-edit-input');
+  if (existing) existing.blur();
+
+  const startBox = state.boxes && state.boxes[person] && state.boxes[person][bIdx];
+  if (!startBox) return;
+  const originalWeight = startBox.weight || '';
+
   const input = document.createElement('input');
   input.type = 'text';
-  input.className = 'cell-input';
-  input.value = box.weight || '';
+  input.className = 'cell-input box-weight-edit-input';
+  input.value = originalWeight;
   input.placeholder = 'e.g. 12 lb';
   input.style.fontSize = '0.7rem';
   input.style.width = '90px';
   input.style.padding = '2px 6px';
 
+  let finished = false;
   const finish = () => {
+    if (finished) return;
+    finished = true;
     const val = input.value.trim();
-    box.weight = val || '';
-    saveStateNow();
+    // Re-fetch the box from current state (in case state was rebuilt)
+    const box = state.boxes && state.boxes[person] && state.boxes[person][bIdx];
+    if (box) {
+      box.weight = val;
+      saveStateNow();
+    }
     renderBoxTracker();
   };
 
@@ -3536,8 +3558,8 @@ function editBoxWeight(person, bIdx, el) {
   input.addEventListener('click', (e) => e.stopPropagation());
   input.addEventListener('keydown', (e) => {
     e.stopPropagation();
-    if (e.key === 'Enter') input.blur();
-    if (e.key === 'Escape') { input.value = box.weight || ''; input.blur(); }
+    if (e.key === 'Enter') { e.preventDefault(); input.blur(); }
+    if (e.key === 'Escape') { input.value = originalWeight; input.blur(); }
   });
 
   el.textContent = '';
@@ -3575,24 +3597,32 @@ function deleteBoxItem(person, bIdx, iIdx) {
 }
 
 function editBoxItem(person, bIdx, iIdx, el) {
-  const items = state.boxes[person][bIdx].items;
+  const startItems = state.boxes && state.boxes[person] && state.boxes[person][bIdx] && state.boxes[person][bIdx].items;
+  if (!startItems) return;
+  const originalItem = startItems[iIdx];
   const input = document.createElement('input');
   input.type = 'text';
   input.className = 'cell-input';
-  input.value = items[iIdx];
+  input.value = originalItem;
   input.style.fontSize = '0.82rem';
 
+  let finished = false;
   const finish = () => {
+    if (finished) return;
+    finished = true;
     const val = input.value.trim();
-    if (val) items[iIdx] = val;
-    saveState();
+    const items = state.boxes && state.boxes[person] && state.boxes[person][bIdx] && state.boxes[person][bIdx].items;
+    if (items && val) {
+      items[iIdx] = val;
+      saveStateNow();
+    }
     renderBoxTracker();
   };
 
   input.addEventListener('blur', finish);
   input.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter') input.blur();
-    if (e.key === 'Escape') { input.value = items[iIdx]; input.blur(); }
+    if (e.key === 'Enter') { e.preventDefault(); input.blur(); }
+    if (e.key === 'Escape') { input.value = originalItem; input.blur(); }
   });
 
   el.textContent = '';
