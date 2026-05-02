@@ -3468,7 +3468,7 @@ function renderBoxTracker() {
 function addBox(person) {
   initBoxes();
   const name = 'Box ' + (state.boxes[person].length + 1);
-  state.boxes[person].push({ name, items: [], collapsed: false });
+  state.boxes[person].push({ name, items: [], collapsed: false, weight: '' });
   saveStateNow();
   renderBoxTracker();
 }
@@ -3523,9 +3523,9 @@ function editBoxName(person, bIdx, el) {
 }
 
 function editBoxWeight(person, bIdx, el) {
-  // Prevent multiple inputs from being open at once
+  // Prevent multiple inputs from being open at once - save+close any open input first
   const existing = document.querySelector('.box-weight-edit-input');
-  if (existing) existing.blur();
+  if (existing && existing._finishFn) existing._finishFn();
 
   const startBox = state.boxes && state.boxes[person] && state.boxes[person][bIdx];
   if (!startBox) return;
@@ -3540,26 +3540,29 @@ function editBoxWeight(person, bIdx, el) {
   input.style.width = '90px';
   input.style.padding = '2px 6px';
 
+  // Save on every keystroke (in-memory), so value is never lost
+  const updateState = () => {
+    const box = state.boxes && state.boxes[person] && state.boxes[person][bIdx];
+    if (box) box.weight = input.value.trim();
+  };
+
   let finished = false;
   const finish = () => {
     if (finished) return;
     finished = true;
-    const val = input.value.trim();
-    // Re-fetch the box from current state (in case state was rebuilt)
-    const box = state.boxes && state.boxes[person] && state.boxes[person][bIdx];
-    if (box) {
-      box.weight = val;
-      saveStateNow();
-    }
+    updateState();
+    saveStateNow();
     renderBoxTracker();
   };
+  input._finishFn = finish;
 
+  input.addEventListener('input', updateState);
   input.addEventListener('blur', finish);
   input.addEventListener('click', (e) => e.stopPropagation());
   input.addEventListener('keydown', (e) => {
     e.stopPropagation();
-    if (e.key === 'Enter') { e.preventDefault(); input.blur(); }
-    if (e.key === 'Escape') { input.value = originalWeight; input.blur(); }
+    if (e.key === 'Enter') { e.preventDefault(); finish(); }
+    if (e.key === 'Escape') { input.value = originalWeight; finish(); }
   });
 
   el.textContent = '';
